@@ -26,6 +26,37 @@
 
 #include <framebot/framebot.h>
 
+
+#define i_U   0  /* InlineKeyboardButton field url */
+#define i_U_STR   "url"  /* InlineKeyboardButton field url */
+
+#define i_LU  1  /* InlineKeyboardButton field login_url */
+#define i_LU_STR  "login_url"  /* InlineKeyboardButton field login_url */
+
+#define i_CD  2  /* InlineKeyboardButton field callback_data */
+#define i_CD_STR  "callback_data"  /* InlineKeyboardButton field callback_data */
+
+#define i_SIQ 3  /* InlineKeyboardButton field switch_inline_query */
+#define i_SIQ_STR "switch_inline_query"  /* InlineKeyboardButton field switch_inline_query */
+
+#define i_SIQCC 4 /* InlineKeyboardButton field switch_inline_query_current_chat */
+#define i_SIQCC_STR "switch_inline_query_current_chat" /* InlineKeyboardButton field switch_inline_query_current_chat */
+
+#define i_CG  5  /* InlineKeyboardButton field callback_game */
+#define i_CG_STR  "callback_game"  /* InlineKeyboardButton field callback_game */
+
+#define IKM   6  /* InlineKeyboardMarkup field InlineKeyboardMarkup */
+#define IKM_STR "InlineKeyboardMarkup" /* InlineKeyboardMarkup field InlineKeyboardMarkup */
+
+
+typedef struct _id_markup {
+	char * identify;
+	char * value;
+	int length;
+	int option;
+	struct _id_markup * next;
+} id_markup;
+
 typedef struct _struct_json {
 	json_t *root;
 	json_t *content;
@@ -67,5 +98,6 @@ SuccessfulPayment * successful_payment_parse(json_t * json);
 File * file_parse(json_t * json);
 UserProfilePhotos * user_profile_photos_parse(json_t * json);
 ChatPhoto * chat_photo_parse(json_t * json);
+
 
 #endif

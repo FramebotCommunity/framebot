@@ -100,7 +100,7 @@ void remove_image_invoice();
 void option_payment(bool n_name, bool n_phone, bool n_email, bool n_shipping_address, bool s_phone_to_provider,
 bool s_email_to_provider, bool is_flexible);
 Message *send_invoice(Bot *bot, int64_t chat_id, char * title, char *description, char *payload, char *start_parameter, char *prices,
-     char *provider_data, int64_t reply_to_message_id, char *reply_markup);
+     char *provider_data, bool disable_notification, int64_t reply_to_message_id, char *reply_markup);
 bool answerShippingQuery(Bot *bot, char *shipping_query_id, bool ok, char *shipping_options, char *error_message);
 bool answerPreCheckoutQuery(Bot *bot, char *pre_checkout_query_id, bool ok, char *error_message);
 

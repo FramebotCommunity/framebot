@@ -23,6 +23,7 @@
 
 #include <framebot/framebot.h>
 
+static id_markup * markup;
 
 refjson * start_json(char * json){
     refjson *s_json = NULL;
@@ -1415,3 +1416,7 @@ ChatPhoto * chat_photo_parse(json_t * json){
 
     return NULL;
 }
+
+
+
+

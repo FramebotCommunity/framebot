@@ -32,8 +32,8 @@ int _voice(){
 
 	printf(WHITE "Send chat_id ........." COLOR_RESET);
 	fflush(stdout);
-	result = send_voice_chat(_bot, chat_id, filename, NULL,
-            0, 0, NULL);
+	result = send_voice_chat(_bot, chat_id, filename, NULL, RAW,
+            0, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 	}
@@ -45,8 +45,8 @@ int _voice(){
 
 	printf(WHITE "Send username ........." COLOR_RESET);
 	fflush(stdout);
-	result = send_voice_chat(_bot, chat_id, filename, NULL,
-            0, 0, NULL);
+	result = send_voice_chat(_bot, chat_id, filename, NULL, RAW,
+            0, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 	}
@@ -58,8 +58,8 @@ int _voice(){
 
 	printf(WHITE "Send caption ........." COLOR_RESET);
 	fflush(stdout);
-	result = send_voice_chat(_bot, chat_id, filename, "caption",
-            0, 0, NULL);
+	result = send_voice_chat(_bot, chat_id, filename, "caption", RAW,
+            0, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 	}
@@ -71,8 +71,8 @@ int _voice(){
 
 	printf(WHITE "Send duration ........." COLOR_RESET);
 	fflush(stdout);
-	result = send_voice_chat(_bot, chat_id, filename, "duration",
-            10, 0, NULL);
+	result = send_voice_chat(_bot, chat_id, filename, "duration", RAW,
+            10, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 	}
@@ -84,9 +84,8 @@ int _voice(){
 
 	printf(WHITE "Send disable_notification ........." COLOR_RESET);
 	fflush(stdout);
-	get_notification(1);
-	result = send_voice_chat(_bot, chat_id, filename, "disable_notification",
-            0, 0, NULL);
+	result = send_voice_chat(_bot, chat_id, filename, "disable_notification", RAW,
+            0, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 	}
@@ -98,8 +97,8 @@ int _voice(){
 
 	printf(WHITE "Send reply_to_message_id ........." COLOR_RESET);
 	fflush(stdout);
-	Message * forward = send_voice_chat(_bot, chat_id, filename, "reply_to_message_id",
-            0, result->message_id, NULL);
+	Message * forward = send_voice_chat(_bot, chat_id, filename, "reply_to_message_id", RAW,
+            0, ON, result->message_id, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 		message_free(forward);

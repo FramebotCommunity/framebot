@@ -39,8 +39,8 @@ Message *result = NULL;
 int _func(){
 	
 	printf("message ........ ");
-	result  = send_message_chat (_bot, chat_id, text,
-            0, 0, NULL);
+	result  = send_message_chat (_bot, chat_id, text, RAW,
+            0, ON, 0, NULL);
 	if(result){
 		printf("ok\n");
 	}
@@ -91,7 +91,7 @@ int _func(){
 
 
 	printf("forward_message_from_chat ............. ");
-	Message * c = forward_message_chat (_bot, chat_id, chat_id, result->message_id);
+	Message * c = forward_message_chat (_bot, chat_id, chat_id, ON, result->message_id);
 	if(c){
 		printf("ok\n");
 		message_free(c);
@@ -112,7 +112,7 @@ int _func(){
 
 	printf("send_location_chat ............ ");
 	Message * d = send_location_chat (_bot, chat_id, -25.064949, -130.101544,
-            400, 1, NULL);
+            400, ON, 1, NULL);
 	if(d){
 		printf("ok\n");
 		message_free(d);
@@ -162,7 +162,7 @@ int _func(){
 
 	printf("send edit_message_text ............. ");
 	Message *f = edit_message_text_chat(_bot, chat_id, result->message_id,
-    NULL, "Mudou - MUDOU", 0, NULL);
+    NULL, "Mudou - MUDOU", RAW, 0, NULL);
     if(f){
     	printf("ok\n");
     	message_free(f);

@@ -73,7 +73,7 @@ void test_invoice(){
 	printf(WHITE "Send invoice .............................." COLOR_RESET);
 	fflush(stdout);
 	result = send_invoice(_bot, chat_id, "product 1", "(description)", "product_1", "forward_product1", prices,
-     NULL, 0, NULL);
+     NULL, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 	}
@@ -90,7 +90,7 @@ void test_invoice(){
 	fflush(stdout);
 	set_currency(CODE_EUR);
 	result = send_invoice(_bot, chat_id, "product 2", "currency (description)", "product 2", "forward_product2", prices,
-     NULL, 0, NULL);
+     NULL, ON, 0, NULL);
 	set_currency(CODE_USD); /* back DOLLAR */
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
@@ -108,7 +108,7 @@ void test_invoice(){
 	/* add_img_invoice(char *photo_url, uint64_t photo_size, uint32_t photo_width, uint32_t photo_heigth) */
 	add_img_invoice("https://telegram.org/img/t_logo.png", 0, 50, 50);
 	result = send_invoice(_bot, chat_id, "product 3", "photo (description)", "product_3", "forward_product3", prices,
-     NULL, 0, NULL);
+     NULL, ON, 0, NULL);
 	remove_image_invoice(); /* remove invoice image */
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
@@ -125,7 +125,7 @@ void test_invoice(){
 	fflush(stdout);
 	option_payment(1, 0, 0, 0, 0, 0, 0);
 	result = send_invoice(_bot, chat_id, "product 4", "need_name (description)", "product_4", "forward_product4", prices,
-     NULL, 0, NULL);
+     NULL, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 	}
@@ -141,7 +141,7 @@ void test_invoice(){
 	fflush(stdout);
 	option_payment(0, 1, 0, 0, 0, 0, 0);
 	result = send_invoice(_bot, chat_id, "product 5", "need_phone_number (description)", "product_5", "forward_product5", prices,
-     NULL, 0, NULL);
+     NULL, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 	}
@@ -157,7 +157,7 @@ void test_invoice(){
 	fflush(stdout);
 	option_payment(0, 0, 1, 0, 0, 0, 0);
 	result = send_invoice(_bot, chat_id, "product 6", "need_email (description)", "product_6", "forward_product6", prices,
-     NULL, 0, NULL);
+     NULL, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 	}
@@ -173,7 +173,7 @@ void test_invoice(){
 	fflush(stdout);
 	option_payment(0, 0, 0, 1, 0, 0, 0);
 	result = send_invoice(_bot, chat_id, "product 7", "need_shipping_address (description)", "product_7", "forward_product7", prices,
-     NULL, 0, NULL);
+     NULL, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 	}
@@ -189,7 +189,7 @@ void test_invoice(){
 	fflush(stdout);
 	option_payment(0, 0, 0, 0, 1, 0, 0);
 	result = send_invoice(_bot, chat_id, "product 8", "send_phone_number_to_provider (description)", "product_8", "forward_product8", prices,
-     NULL, 0, NULL);
+     NULL, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 	}
@@ -205,7 +205,7 @@ void test_invoice(){
 	fflush(stdout);
 	option_payment(0, 0, 0, 0, 0, 1, 0);
 	result = send_invoice(_bot, chat_id, "product 9", "send_email_to_provider (description)", "product_9", "forward_product9", prices,
-     NULL, 0, NULL);
+     NULL, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 	}
@@ -221,7 +221,7 @@ void test_invoice(){
 	fflush(stdout);
 	option_payment(0, 0, 0, 0, 0, 0, 1);
 	result = send_invoice(_bot, chat_id, "product 10", "is_flexible (description)", "product_10", "forward_product10", prices,
-     NULL, 0, NULL);
+     NULL, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 	}
@@ -237,7 +237,7 @@ void test_invoice(){
 	fflush(stdout);
 	option_payment(1, 1, 1, 1, 1, 1, 1);
 	result = send_invoice(_bot, chat_id, "product 11", "all (description)", "product_11", "forward_product11", prices,
-     NULL, 0, NULL);
+     NULL, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 	}
@@ -253,7 +253,7 @@ void test_invoice(){
 	fflush(stdout);
 	option_payment(0, 0, 0, 0, 0, 0, 1);
 	result = send_invoice(_bot, chat_id, "product 12", "delivery (description)", "product_12", "forward_product12", prices,
-     NULL, 0, NULL);
+     NULL, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 	}
