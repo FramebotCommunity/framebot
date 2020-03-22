@@ -227,6 +227,41 @@ typedef struct _poll {
 } Poll;
 
 
+typedef struct _passport_file {
+    char *file_id;
+    char *file_unique_id;
+    int64_t file_size;
+    int64_t file_date;
+} PassportFile;
+
+
+typedef struct _encrypted_credentials {
+    char * data;
+    char * hash;
+    char * secret;
+} EncryptedCredentials;
+
+
+typedef struct _encrypted_passaport_element {
+    char *type;
+    char *data;
+    char *phone_number;
+    char *email;
+    PassportFile *files;
+    PassportFile *front_side;
+    PassportFile *reverse_side;
+    PassportFile *selfie;
+    PassportFile *translation;
+    char *hash;
+} EncryptedPassportElement;
+
+
+typedef struct _passaport_data {
+    EncryptedPassportElement *data;
+    EncryptedCredentials *credentials;
+} PassporData;
+
+
 typedef struct _invoice{
     char *title;
     char *description;
@@ -287,6 +322,7 @@ typedef struct _message{
     Chat *forward_from_chat;
     int64_t forward_from_message_id;
     char *forward_signature;
+    char *forward_sender_name;
     int64_t forward_date;
     struct _message *reply_to_message;
     int64_t edit_date;
@@ -297,6 +333,7 @@ typedef struct _message{
     MessageEntity *caption_entities;
     Audio *audio;
     Document *document;
+    Animation *animation;
     Game *game;
     PhotoSize *photo;//Array
     Sticker *sticker;
@@ -307,6 +344,7 @@ typedef struct _message{
     Contact *contact;
     Location *location;
     Venue *venue;
+    Poll *poll;
     User *new_chat_members;
     User *left_chat_member;
     char *new_chat_title;
@@ -321,6 +359,8 @@ typedef struct _message{
     Invoice *invoice;
     SuccessfulPayment *successful_payment;
     char *connected_website;
+    PassportData *passport_data;
+    InlneKeyboardMarkup *reply_markup;
 } Message;
 
 typedef struct _inline_query{
@@ -375,6 +415,8 @@ typedef struct {
     Update *up_callback_query;
     Update *up_shipping_query;
     Update *up_pre_checkout_query;
+    Poll * poll;
+    PollAnswer * poll_answer;
 } Framebot;
 
 typedef struct _chat_member {
