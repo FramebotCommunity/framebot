@@ -111,13 +111,34 @@ typedef struct _game{
     Animation *animation;
 } Game;
 
+
+typedef struct _sticker_set{
+    char * name;
+    char * title;
+    bool is_animated;
+    bool contains_masks;
+    Sticker * stickers;
+} StickerSet;
+
+typedef struct _mask_position {
+    char * point;
+    double x_shift;
+    double y_shift;
+    double scale;
+} MaskPosition;
+
 typedef struct _sticker{
     char *file_id;
+    char *file_unique_id;
     int width;
     int height;
+    bool is_animated;
     PhotoSize *thumb;
     char *emoji;
+    char * set_name;
+    MaskPosition * mask_position;
     int64_t file_size;
+    struct _sticker * next;
 } Sticker;
 
 typedef struct _video{
