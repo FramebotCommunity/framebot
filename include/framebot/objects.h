@@ -201,6 +201,32 @@ typedef struct _venue{
     char *foursquare_id;
 } Venue;
 
+
+typedef struct _pool_option {
+    char * text;
+    int voter_count;
+} PollOption;
+
+typedef struct _pool_answer {
+    char * poll_id;
+    User * user;
+    int * option_ids;
+} PollAnswer;
+
+
+typedef struct _poll {
+    char * id;
+    char * question;
+    PollOption * options;
+    int total_voter_count;
+    bool is_closed;
+    bool is_anonymous;
+    char * type;
+    bool allows_multiple_answers;
+    int correct_option_id;
+} Poll;
+
+
 typedef struct _invoice{
     char *title;
     char *description;
@@ -354,18 +380,21 @@ typedef struct {
 typedef struct _chat_member {
     User *user;
     char *status;
+    char * custom_title;
     int64_t until_date;
     bool can_be_edited:1;
-    bool can_change_info:1;
     bool can_post_messages:1;
     bool can_edit_messages:1;
     bool can_delete_messages:1;
-    bool can_invite_users:1;
     bool can_restrict_members:1;
-    bool can_pin_messages:1;
     bool can_promote_members:1;
+    bool can_change_info:1;
+    bool can_invite_users:1;
+    bool can_pin_messages:1;
+    bool is_member:1;
     bool can_send_messages:1;
     bool can_send_media_messages:1;
+    bool can_send_polls:1;
     bool can_send_other_messages:1;
     bool can_add_web_page_previews:1;
 
