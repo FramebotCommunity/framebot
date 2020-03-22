@@ -50,6 +50,19 @@ typedef struct _chat_photo{
     char *big_file_id;
 } ChatPhoto;
 
+
+typedef struct _chat_permissions {
+    bool can_send_messages;
+    bool can_send_media_messages;
+    bool can_send_polls;
+    bool can_send_other_messages;
+    bool can_add_web_page_previews;
+    bool can_change_info;
+    bool can_invite_users;
+    bool can_pin_messages;
+} ChatPermissions;
+
+
 typedef struct _chat{
     int64_t id;
     char *type;
@@ -120,12 +133,14 @@ typedef struct _sticker_set{
     Sticker * stickers;
 } StickerSet;
 
+
 typedef struct _mask_position {
     char * point;
     double x_shift;
     double y_shift;
     double scale;
 } MaskPosition;
+
 
 typedef struct _sticker{
     char *file_id;
@@ -140,6 +155,7 @@ typedef struct _sticker{
     int64_t file_size;
     struct _sticker * next;
 } Sticker;
+
 
 typedef struct _video{
     char *file_id;
