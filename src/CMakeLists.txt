@@ -16,7 +16,6 @@ if(UNIX)
 		message(SEND_ERROR "Only Linux, FreeBSD and Windows are supported at this time.")
 	endif()
 
-	set(curl /usr/local/lib/libcurl.so) 
 
 	add_library(framebot_ SHARED framebot.c memory.c objects.c json.c network.c format.c util.c payments.c)
 	target_link_libraries(framebot_ ${JANSSON_LIB} ${curl})
