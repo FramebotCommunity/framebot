@@ -125,15 +125,6 @@ typedef struct _game{
 } Game;
 
 
-typedef struct _sticker_set{
-    char * name;
-    char * title;
-    bool is_animated;
-    bool contains_masks;
-    Sticker * stickers;
-} StickerSet;
-
-
 typedef struct _mask_position {
     char * point;
     double x_shift;
@@ -155,6 +146,15 @@ typedef struct _sticker{
     int64_t file_size;
     struct _sticker * next;
 } Sticker;
+
+
+typedef struct _sticker_set{
+    char * name;
+    char * title;
+    bool is_animated;
+    bool contains_masks;
+    Sticker * stickers;
+} StickerSet;
 
 
 typedef struct _video{
@@ -259,7 +259,7 @@ typedef struct _encrypted_passaport_element {
 typedef struct _passaport_data {
     EncryptedPassportElement *data;
     EncryptedCredentials *credentials;
-} PassporData;
+} PassportData;
 
 
 typedef struct _invoice{
@@ -313,6 +313,43 @@ typedef struct _pre_checkout_query{
     OrderInfo *order_info;
 } PreCheckoutQuery;
 
+typedef struct _callback_game{
+    int64_t user_id;
+    int64_t score;
+    bool force:1;
+    bool disable_edit_message:1;
+    int64_t chat_id;
+    int64_t message_id;
+    char *inline_message_id;
+} CallbackGame;
+
+
+typedef struct _login_url {
+    char * url;
+    char * forward_text;
+    char * bot_username;
+    bool request_write_access;
+} LoginUrl;
+
+
+typedef struct _inline_keyboard_button {
+    char * text;
+    char * url;
+    LoginUrl *login_url;
+    char * callback_data;
+    char * switch_inline_query;
+    char * switch_inline_query_current_chat;
+    CallbackGame * callback;
+    bool pay;
+    struct _inline_keyboard_markup * next;
+}InlineKeyboardButton;
+
+
+typedef struct _inline_keyboard_markup {
+    InlineKeyboardButton * inline_keyboard;
+} InlineKeyboardMarkup;
+
+
 typedef struct _message{
     int64_t message_id;
     User *from;
@@ -360,7 +397,7 @@ typedef struct _message{
     SuccessfulPayment *successful_payment;
     char *connected_website;
     PassportData *passport_data;
-    InlneKeyboardMarkup *reply_markup;
+    InlineKeyboardMarkup *reply_markup;
 } Message;
 
 typedef struct _inline_query{
@@ -454,18 +491,7 @@ typedef struct _user_profile_photos{
     PhotoSize ** photos;
 } UserProfilePhotos;
 
-typedef struct _callback_game{
-    int64_t user_id;
-    int64_t score;
-    bool force:1;
-    bool disable_edit_message:1;
-    int64_t chat_id;
-    int64_t message_id;
-    char *inline_message_id;
-} CallbackGame;
 
-
- 
 //User functions
 void user_add(User *origin, User *next);
 void user_free(User *usr);
