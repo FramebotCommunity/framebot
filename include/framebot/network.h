@@ -67,6 +67,7 @@ typedef struct _saudio{
 	char * duration;
 	char * performer;
 	char * title;
+	char * thumb;
 	char * disable_notification;
 	char * reply_to_message_id;
 	char * reply_markup;
@@ -76,6 +77,7 @@ typedef struct _sdocument{
 	int type;
 	char * chat_id;
 	char * filename;
+	char * thumb;
 	char * caption;
 	char * parse_mode;
 	char * disable_notification;
@@ -90,6 +92,7 @@ typedef struct _svideo{
 	char * duration;
 	char * width;
 	char * height;
+	char * thumb;
 	char * caption;
 	char * parse_mode;
 	char * supports_streaming;
@@ -116,6 +119,7 @@ typedef struct _svnote{
 	char * filename;
 	char * duration;
 	char * length;
+	char * thumb;
 	char * disable_notification;
 	char * reply_to_message_id;
 	char * reply_markup;

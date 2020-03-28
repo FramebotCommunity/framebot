@@ -249,6 +249,12 @@
 &ok=%s\
 &error_message=%s"
 
+#define API_sendMediaGroup "sendMediaGroup\
+?chat_id=%s\
+?media=%s\
+?disable_notification=%s\
+?reply_to_message_id=%ld"
+
 /* analyze parameter API methods */
 #define CONVERT_BOOLEAN_STR(p) (p > 0 ? "true" : "false")
 #define CONVERT_URL_STRING(p) (p == NULL ? "" : p)
@@ -354,23 +360,23 @@ Message * send_photo_chat(Bot * bot, int64_t chat_id, char * filename, char * ca
 /* sendaudio */
 Message * send_audio(Bot *bot, char * chat_id, char * filename, char * caption,
         char * parse_mode, int32_t duration, char * performer, char * title,
-        bool disable_notification, int64_t reply_to_message_id, char * reply_markup);
+        char * thumb, bool disable_notification, int64_t reply_to_message_id, char * reply_markup);
 Message * send_audio_chat(Bot * bot, int64_t chat_id, char * filename, char * caption, 
         char * parse_mode, int32_t duration, char * performer, char * title,
-        bool disable_notification, int64_t reply_to_message_id, char * reply_markup);
+        char * thumb, bool disable_notification, int64_t reply_to_message_id, char * reply_markup);
 
 /* senddocument */
-Message * send_document(Bot * bot, char * chat_id, char * filename, char * caption,
+Message * send_document(Bot * bot, char * chat_id, char * filename, char * thumb, char * caption,
         char * parse_mode, bool disable_notification, int64_t reply_to_message_id,  char * reply_markup);
-Message * send_document_chat(Bot * bot, int64_t chat_id, char * filename, char * caption,
+Message * send_document_chat(Bot * bot, int64_t chat_id, char * filename, char *thumb, char * caption,
         char * parse_mode, bool disable_notification, int64_t reply_to_message_id,  char * reply_markup);
 
 /* sendvideo */
 Message * send_video(Bot * bot, char * chat_id, char * video, int32_t duration, int32_t width,
-        int32_t height, char * caption, char * parse_mode, bool supports_streaming, 
+        int32_t height, char * thumb, char * caption, char * parse_mode, bool supports_streaming, 
         bool disable_notification, int64_t reply_to_message_id, char * reply_markup);
 Message * send_video_chat(Bot * bot, int64_t chat_id, char * video, int32_t duration, int32_t width,
-        int32_t height, char * caption, char * parse_mode, bool supports_streaming,
+        int32_t height, char * thumb, char * caption, char * parse_mode, bool supports_streaming,
         bool disable_notification, int64_t reply_to_message_id, char * reply_markup);
 
 /* sendvoice */
@@ -544,7 +550,7 @@ bool answer_inline_query( Bot *bot, char *inline_query_id, char *results, int64_
 void set_notification(bool disable_notification);
 bool get_notification();
 
-void set_parse_mode(int32_t mode);
-int32_t get_parse_mode();
+Message * send_media_group(char * chat_id, char * media, bool disable_notification, char * reply_to_message_id);
+
 
 #endif

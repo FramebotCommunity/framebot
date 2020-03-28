@@ -280,6 +280,18 @@ MemStore * call_method_upload(const char * token, IFile ifile){
                     curl_mime_data(field, ifile.audio.title, CURL_ZERO_TERMINATED);
                 }
 
+
+                /* Fill in the thumb field */
+                if(ifile.audio.thumb != NULL){
+                    field = curl_mime_addpart(form);
+                    curl_mime_name(field, "thumb");
+                    if(api_tg_exist(ifile.audio.thumb))
+                        curl_mime_filedata(field, ifile.audio.thumb);
+                    else
+                        curl_mime_data(field, ifile.audio.thumb, CURL_ZERO_TERMINATED);
+                }
+
+
                 /* Sends the message silently */
                 if(ifile.audio.disable_notification != NULL){
                     field = curl_mime_addpart(form);
@@ -319,6 +331,18 @@ MemStore * call_method_upload(const char * token, IFile ifile){
                     else
                         curl_mime_data(field, ifile.document.filename, CURL_ZERO_TERMINATED);
                 }
+
+
+                /* upload file */
+                if(ifile.document.thumb != NULL){
+                    field = curl_mime_addpart(form);
+                    curl_mime_name(field, "document");
+                    if(api_tg_exist(ifile.document.thumb))
+                        curl_mime_filedata(field, ifile.document.thumb);
+                    else
+                        curl_mime_data(field, ifile.document.thumb, CURL_ZERO_TERMINATED);
+                }
+
 
                 /* Document caption */
                 if(ifile.document.caption != NULL){
@@ -394,6 +418,18 @@ MemStore * call_method_upload(const char * token, IFile ifile){
                     curl_mime_name(field, "height");
                     curl_mime_data(field, ifile.video.height, CURL_ZERO_TERMINATED);
                 }
+
+
+                /* upload file */
+                if(ifile.video.thumb != NULL){
+                    field = curl_mime_addpart(form);
+                    curl_mime_name(field, "thumb");
+                    if(api_tg_exist(ifile.video.thumb))
+                        curl_mime_filedata(field, ifile.video.thumb);
+                    else
+                        curl_mime_data(field, ifile.video.thumb, CURL_ZERO_TERMINATED);
+                }
+
 
                 /* Document caption */
                 if(ifile.video.caption != NULL){
@@ -529,6 +565,18 @@ MemStore * call_method_upload(const char * token, IFile ifile){
                     curl_mime_name(field, "length");
                     curl_mime_data(field, ifile.videonote.length, CURL_ZERO_TERMINATED);
                 }
+
+
+                /* Fill in the thumb field */
+                if(ifile.videonote.thumb != NULL){
+                    field = curl_mime_addpart(form);
+                    curl_mime_name(field, "thumb");
+                    if(api_tg_exist(ifile.videonote.thumb))
+                        curl_mime_filedata(field, ifile.videonote.thumb);
+                    else
+                        curl_mime_data(field, ifile.videonote.thumb, CURL_ZERO_TERMINATED);
+                }
+
 
                 /* Sends the message silently */
                 if(ifile.videonote.disable_notification != NULL){

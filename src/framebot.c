@@ -959,8 +959,9 @@ Message * send_photo_chat(Bot * bot, int64_t chat_id, char * filename, char * ca
  */
 Message * send_audio(Bot *bot, char * chat_id, char * filename, char * caption,
             char * parse_mode, int32_t duration, char * performer, char * title,
-            bool disable_notification, int64_t reply_to_message_id, char * reply_markup){
-    
+            char * thumb, bool disable_notification, int64_t reply_to_message_id,
+            char * reply_markup){
+
     Message * message;
 
     IFile ifile;
@@ -986,6 +987,8 @@ Message * send_audio(Bot *bot, char * chat_id, char * filename, char * caption,
 
     /* Track name */
     ifile.audio.title = title;
+
+    ifile.audio.thumb = thumb;
 
     /* Sends the message silently */
     ifile.audio.disable_notification = CONVERT_BOOLEAN_STR(disable_notification);
@@ -1020,7 +1023,7 @@ Message * send_audio(Bot *bot, char * chat_id, char * filename, char * caption,
 
 Message * send_audio_chat(Bot * bot, int64_t chat_id, char * filename, char * caption,
             char * parse_mode, int32_t duration, char * performer, char * title,
-            bool disable_notification, int64_t reply_to_message_id, char * reply_markup){
+            char * thumb, bool disable_notification, int64_t reply_to_message_id, char * reply_markup){
 
     Message * message;
     char * cchat_id;
@@ -1028,7 +1031,7 @@ Message * send_audio_chat(Bot * bot, int64_t chat_id, char * filename, char * ca
     cchat_id = api_ltoa(chat_id);
 
     message = send_audio(bot, cchat_id, filename, caption, parse_mode, duration,
-                                 performer, title, disable_notification,
+                                 performer, thumb, title, disable_notification,
                                  reply_to_message_id, reply_markup);
 
     ffree(cchat_id);
@@ -1041,7 +1044,7 @@ Message * send_audio_chat(Bot * bot, int64_t chat_id, char * filename, char * ca
  * sendDocument
  * https://core.telegram.org/bots/api#senddocument
  */
-Message * send_document(Bot * bot, char * chat_id, char * filename, char * caption,
+Message * send_document(Bot * bot, char * chat_id, char * filename, char * thumb, char * caption,
 			char * parse_mode, bool disable_notification, int64_t reply_to_message_id, char * reply_markup){
 
     Message * message;
@@ -1055,6 +1058,9 @@ Message * send_document(Bot * bot, char * chat_id, char * filename, char * capti
 
     /* Document to send */
     ifile.document.filename = filename;
+
+
+    ifile.document.thumb = thumb;
 
     /* Document caption (may also be used when resending 
      * Documents by file_id), 0-200 characters */
@@ -1091,7 +1097,7 @@ Message * send_document(Bot * bot, char * chat_id, char * filename, char * capti
 
 
 
-Message * send_document_chat(Bot * bot, int64_t chat_id, char * filename, char * caption,
+Message * send_document_chat(Bot * bot, int64_t chat_id, char * filename, char * thumb, char * caption,
 		char * parse_mode, bool disable_notification, int64_t reply_to_message_id, char * reply_markup){
 
     Message * message;
@@ -1099,7 +1105,7 @@ Message * send_document_chat(Bot * bot, int64_t chat_id, char * filename, char *
     
     cchat_id = api_ltoa(chat_id);
 
-    message = send_document(bot, cchat_id, filename, caption, parse_mode, disable_notification,
+    message = send_document(bot, cchat_id, filename, thumb, caption, parse_mode, disable_notification,
                                  reply_to_message_id, reply_markup);
 
     ffree(cchat_id);
@@ -1113,7 +1119,7 @@ Message * send_document_chat(Bot * bot, int64_t chat_id, char * filename, char *
  * https://core.telegram.org/bots/api#sendvideo
  */
 Message * send_video(Bot * bot, char * chat_id, char * filename, int32_t duration,
-            int32_t width, int32_t height, char * caption, char * parse_mode, bool supports_streaming,
+            int32_t width, int32_t height, char * thumb, char * caption, char * parse_mode, bool supports_streaming,
             bool disable_notification, int64_t reply_to_message_id, char * reply_markup){
     Message * message;
 
@@ -1135,6 +1141,8 @@ Message * send_video(Bot * bot, char * chat_id, char * filename, int32_t duratio
 
     /* Video height */
     ifile.video.height = IFILE_INT(height);
+
+    ifile.video.thumb = thumb;
 
     /* Audio caption, 0-200 characters */
     ifile.video.caption = caption;
@@ -1179,7 +1187,7 @@ Message * send_video(Bot * bot, char * chat_id, char * filename, int32_t duratio
 
 
 Message * send_video_chat(Bot * bot, int64_t chat_id, char * filename, int32_t duration,
-            int32_t width, int32_t height, char * caption, char * parse_mode, bool supports_streaming,
+            int32_t width, int32_t height, char * thumb, char * caption, char * parse_mode, bool supports_streaming,
             bool disable_notification, int64_t reply_to_message_id, char * reply_markup){
 
     Message * message;
@@ -1187,7 +1195,7 @@ Message * send_video_chat(Bot * bot, int64_t chat_id, char * filename, int32_t d
     
     cchat_id = api_ltoa(chat_id);
 
-    message = send_video(bot, cchat_id, filename, duration, width, height, caption,
+    message = send_video(bot, cchat_id, filename, duration, width, height, thumb, caption,
     			parse_mode, supports_streaming, disable_notification, reply_to_message_id,
     			reply_markup);
 
@@ -1909,4 +1917,10 @@ bool answer_inline_query( Bot *bot, char *inline_query_id, char *results, int64_
     close_json( s_json );
 
     return result;
+}
+
+Message * send_media_group(char * chat_id, char * media, bool disable_notification, char * reply_to_message_id){
+
+
+
 }

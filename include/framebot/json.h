@@ -99,5 +99,8 @@ File * file_parse(json_t * json);
 UserProfilePhotos * user_profile_photos_parse(json_t * json);
 ChatPhoto * chat_photo_parse(json_t * json);
 
+char * input_media_photo(char * identify, char * type, char * media, char * caption, char * parse_mode);
+char * input_media_video(char * identify, char * type, char * media, char * thumb, char * caption, char * parse_mode,
+                                int32_t width, int32_t duration, bool supports_streaming);
 
 #endif

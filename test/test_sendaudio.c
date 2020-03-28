@@ -33,7 +33,7 @@ int _audio(){
 	printf(WHITE "Send chat_id ......... " COLOR_RESET);
 	fflush(stdout);
 	result = send_audio_chat(_bot, chat_id, filename, NULL,
-			RAW, 0, NULL, NULL, ON, 0, NULL);
+			RAW, 0, NULL, NULL, NULL, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 	}
@@ -47,7 +47,7 @@ int _audio(){
 	printf(WHITE "Send username ......... " COLOR_RESET);
 	fflush(stdout);
 	result = send_audio_chat(_bot, chat_id, filename, NULL,
-			RAW, 0, NULL, NULL, ON, 0, NULL);
+			RAW, 0, NULL, NULL, NULL, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 	}
@@ -61,7 +61,7 @@ int _audio(){
 	printf(WHITE "Send caption ......... " COLOR_RESET);
 	fflush(stdout);
 	result = send_audio_chat(_bot, chat_id, filename, "caption",
-			RAW, 0, NULL, NULL, ON, 0, NULL);
+			RAW, 0, NULL, NULL, NULL, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 	}
@@ -75,7 +75,7 @@ int _audio(){
 	printf(WHITE "Send duration ......... " COLOR_RESET);
 	fflush(stdout);
 	result = send_audio_chat(_bot, chat_id, filename, "duration",
-			RAW, 10, NULL, NULL, ON, 0, NULL);
+			RAW, 10, NULL, NULL, NULL, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 	}
@@ -89,7 +89,7 @@ int _audio(){
 	printf(WHITE "Send performer ......... " COLOR_RESET);
 	fflush(stdout);
 	result = send_audio_chat(_bot, chat_id, filename, "performer",
-			RAW, 10, "performer", NULL, ON, 0, NULL);
+			RAW, 10, "performer", NULL, NULL, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 	}
@@ -103,7 +103,7 @@ int _audio(){
 	printf(WHITE "Send title ......... " COLOR_RESET);
 	fflush(stdout);
 	result = send_audio_chat(_bot, chat_id, filename, "title",
-			RAW, 10, "performer", "Title", ON, 0, NULL);
+			RAW, 10, "performer", "Title", NULL, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 	}
@@ -116,7 +116,7 @@ int _audio(){
 
 	printf(WHITE "Send disable_notification ......... " COLOR_RESET);
 	result = send_audio_chat(_bot, chat_id, filename, "disable_notification",
-			RAW, 10, "performer", "Title", ON, 0, NULL);
+			RAW, 10, "performer", "Title", NULL, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 	}
@@ -128,7 +128,7 @@ int _audio(){
 
 	printf(WHITE "Send reply_to_message_id ......... " COLOR_RESET);
 	Message * forward = send_audio_chat(_bot, chat_id, filename, "reply_to_message_id",
-			RAW, 10, "performer", "Title", ON, result->message_id, NULL);
+			RAW, 10, "performer", "Title", NULL, ON, result->message_id, NULL);
 	if(forward){
 		printf(BLUE "OK\n" COLOR_RESET);
 	}
