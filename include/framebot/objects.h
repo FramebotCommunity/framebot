@@ -398,6 +398,7 @@ typedef struct _message{
     char *connected_website;
     PassportData *passport_data;
     InlineKeyboardMarkup *reply_markup;
+    struct _message * next;
 } Message;
 
 typedef struct _inline_query{
