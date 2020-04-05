@@ -142,6 +142,19 @@
 &reply_to_message_id=%ld\
 &reply_markup=%s"
 
+#define API_sendPoll "sendPoll\
+?chat_id=%s\
+&question=%s\
+&options=%s\
+&is_anonymous=%s\
+&type=%s\
+&allows_multiple_answers=%s\
+&correct_option_id=%d\
+&is_closed=%s\
+&disable_notification=%s\
+&reply_to_message_id=%ld\
+&reply_markup=%s"
+
 #define API_sendChatAction "sendChatAction\
 ?chat_id=%s\
 &action=%s"
@@ -427,6 +440,15 @@ Message * send_contact(Bot * bot, char * chat_id, char * phone_number, char * fi
             char * last_name, bool disable_notification, int64_t reply_to_message_id, char * reply_markup);
 Message * send_contact_chat(Bot * bot, int64_t chat_id, char * phone_number, char * first_name,
             char * last_name, bool disable_notification, int64_t reply_to_message_id, char * reply_markup);
+
+/* sendPoll */
+Message * send_poll(Bot *bot, char *chat_id, char *question, char *options, bool is_anonymous,
+                    char *type, bool allows_multiple_answers, int32_t correct_option_id, bool is_closed,
+                    bool disable_notification, int32_t reply_to_message_id, char *reply_markup);
+Message * send_poll_chat(Bot *bot, int64_t chat_id, char *question, char *options, bool is_anonymous,
+                    char *type, bool allows_multiple_answers, int32_t correct_option_id, bool is_closed,
+                    bool disable_notification, int32_t reply_to_message_id, char *reply_markup);
+
 
 /* sendChatAction */
 int send_chat_action(Bot * bot, char * chat_id, char * action);

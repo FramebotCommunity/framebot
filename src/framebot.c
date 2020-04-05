@@ -803,6 +803,7 @@ refjson *generic_method_call (const char *token, char *formats, ...) {
 
     char *method_base = vsformat(formats, params);
     MemStore *response = call_method(token, method_base);
+    printf("--(%s)\n", method_base);
     ffree(method_base);
 
     if(response){
@@ -1524,6 +1525,48 @@ Message * send_contact_chat(Bot * bot, int64_t chat_id, char * phone_number, cha
     return message;
 }
 
+
+/**
+ * sendPoll
+ * https://core.telegram.org/bots/api#sendpoll
+ */
+Message * send_poll(Bot *bot, char *chat_id, char *question, char *options, bool is_anonymous,
+                    char *type, bool allows_multiple_answers, int32_t correct_option_id, bool is_closed,
+                    bool disable_notification, int32_t reply_to_message_id, char *reply_markup){
+
+    Message * message;
+    refjson * s_json;
+
+
+    s_json = generic_method_call(bot->token, API_sendPoll, chat_id, question, options, CONVERT_BOOLEAN_STR(is_anonymous), CONVERT_URL_STRING(type), CONVERT_BOOLEAN_STR(allows_multiple_answers),
+                    correct_option_id, CONVERT_BOOLEAN_STR(is_closed), CONVERT_BOOLEAN_STR(disable_notification), reply_to_message_id, CONVERT_URL_STRING(reply_markup));
+
+    if(!s_json)
+        return NULL;
+
+    message = message_parse(s_json->content);
+
+    close_json ( s_json );
+
+    return message;   
+}
+
+Message * send_poll_chat(Bot *bot, int64_t chat_id, char *question, char *options, bool is_anonymous, char *type, bool allows_multiple_answers, int32_t correct_option_id,
+                    bool is_closed, bool disable_notification, int32_t reply_to_message_id, char *reply_markup){
+
+    Message * message;
+    char * cchat_id;
+
+    cchat_id = api_ltoa(chat_id);
+
+
+    message =  send_poll(bot, cchat_id, question, options, is_anonymous,
+                    type, allows_multiple_answers, correct_option_id, is_closed,
+                    disable_notification, reply_to_message_id, reply_markup);
+    ffree(cchat_id);
+
+    return message;
+}
 
 /**
  * sendChatAction

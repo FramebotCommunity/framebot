@@ -19,47 +19,26 @@
 #define LIGHT_CYAN "\033[01;36m"
 #define WHITE "\033[01;37m"
 
-
 Bot * _bot = NULL;
 char *username = NULL;
 int64_t chat_id = 0;
 int valid_username = 0;
-char **filename = NULL;
+char *text = NULL;
 Message *result = NULL;
+char * options = "[\"option\", \"option2\"]";
 
-char * media = "[{\"type\":\"photo\",\"media\":\"attach://photo_1\"},{\"type\":\"photo\",\"media\":\"attach://photo_2\"}]";
-
-int _media_group(){
-
-	printf(WHITE "Send mediagroup ... \n");
-
+int _poll(){
+	printf(WHITE "Send sendPoll ... \n");
 
 	printf(WHITE "Send chat_id ........." COLOR_RESET);
 	fflush(stdout);
-	result = send_media_group_chat(_bot, chat_id, media, filename, ON, 0);
+	result = send_poll_chat(_bot, chat_id, "parameter chat_id", options, false, NULL, 0, 0, 0, 0, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
-		message_free(result);
 	}
 	else{
 		Error *error = get_error();
-		printf("=========\n");
-		if(error)
-			printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
-		exit(-1);
-	}
-
-	printf(WHITE "Send chat_id u........" COLOR_RESET);
-	fflush(stdout);
-	result = send_media_group_chat(_bot, chat_id, media, filename, ON, 28024);
-	if(result){
-		printf(BLUE "OK\n" COLOR_RESET);
-		message_free(result);
-	}
-	else{
-		Error *error = get_error();
-		if(error)
-			printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -68,8 +47,8 @@ int _media_group(){
 
 int main(int argc, char *argv[]){
 
-	if(argc < 5){
-		fprintf(stderr, "sendmediagroup <token> <username> <path photo> <path photo2>");
+	if(argc < 4){
+		fprintf(stderr, "sendphoto <token> <username>");
 		exit(-1);
 	}
 
@@ -79,29 +58,30 @@ int main(int argc, char *argv[]){
 		exit(-1);
 	}
 
-	filename = calloc(sizeof(char *), 3);
-
-	filename[0] = argv[3];
-	filename[1] = argv[4];
-	filename[2] = NULL;
 	username = argv[2];
 
-
 	Framebot *update = NULL;
+	Update *message = NULL;
 
 	update = get_updates(_bot, update, 0, 0, 0, "message");
+	message = update->up_message;
 
-	while(update->up_message){
+	while(message){
 		if(strcmp(update->up_message->message->from->username, argv[2]) == 0){
 			valid_username = 1;
 			chat_id = update->up_message->message->from->id;
-			_media_group();
+			_poll();
 			break;
 		}
+
+		printf("\nuser found: %s\n", update->up_message->message->from->username);
+		message = message->next;
+
 	}
 
 	if(valid_username == 0)
-		printf("Username not found");
+		printf("\nUsername %s not found", argv[2]);
+
 
 	return 0;
 }
