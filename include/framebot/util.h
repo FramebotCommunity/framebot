@@ -10,4 +10,6 @@ char * api_itoa(int n);
 int api_atoi(char * str_int);
 int64_t api_atol(char * str_long);
 
+bool verify_count_field(char **filename, char **field);
+
 #endif

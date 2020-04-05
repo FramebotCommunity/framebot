@@ -45,7 +45,7 @@ int _video(){
 	else{
 		Error *error = get_error();
 		if(error)
-			printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+			printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -59,7 +59,7 @@ int _video(){
 	else{
 		Error *error = get_error();
 		if(error)
-			printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+			printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -73,7 +73,7 @@ int _video(){
 	else{
 		Error *error = get_error();
 		if(error)
-			printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+			printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -87,7 +87,7 @@ int _video(){
 	else{
 		Error *error = get_error();
 		if(error)
-			printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+			printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -101,7 +101,7 @@ int _video(){
 	else{
 		Error *error = get_error();
 		if(error)
-			printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+			printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -115,7 +115,7 @@ int _video(){
 	else{
 		Error *error = get_error();
 		if(error)
-			printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+			printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -129,7 +129,7 @@ int _video(){
 	else{
 		Error *error = get_error();
 		if(error)
-			printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+			printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -143,7 +143,7 @@ int _video(){
 	else{
 		Error *error = get_error();
 		if(error)
-			printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+			printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -156,7 +156,7 @@ int _video(){
 	else{
 		Error *error = get_error();
 		if(error)
-			printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+			printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -171,7 +171,7 @@ int _video(){
 	else{
 		Error *error = get_error();
 		if(error)
-			printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+			printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 

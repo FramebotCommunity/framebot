@@ -675,6 +675,28 @@ ChosenInlineResult * chosen_inline_result_parse(json_t * json){
  **   char *connected_website;
  **} Message;
  **/
+
+Message * message_array_parse (json_t * json) {
+
+    Message *message = NULL, *message_next = NULL;
+    json_t *array_message = json;
+    size_t length, i;
+
+    length = json_array_size( array_message );
+
+    message = message_parse( json_array_get(array_message, 0));
+    if (length > 0) {
+        for (i = 1; i < length; i++) {
+            message_next = message_parse(json_array_get(array_message, i));
+            if (message_next)
+                message_add(message, message_next);
+        }
+    }
+
+    return message;
+}
+
+
 Message * message_parse(json_t *json){
     Message *message = NULL;
     json_t * pmessage = json;
@@ -1418,11 +1440,52 @@ ChatPhoto * chat_photo_parse(json_t * json){
 }
 
 
-char * input_media_photo(char * identify, char * type, char * media, char * caption, char * parse_mode){
+char **media_group_media_parse(char * media){
+    refjson *sjson = NULL;
+    json_t *json = NULL, *json_media = NULL;
+    size_t length, id = 0, id_file = 0;
+    char **attach = NULL;
+    char * attach_single = NULL, *value_media;
 
+    sjson = load(media);
+
+    length = json_array_size( sjson->root );
+
+    attach = calloc(sizeof(char *), length + 1);
+
+    for(id = 0; length > id; id++){
+
+        json = json_array_get(sjson->root, id);
+
+        json_media = json_object_get(json, "media");
+        value_media = alloc_string(json_string_value(json_media));
+
+        if(value_media == NULL){
+            continue;
+        }
+
+        attach_single = found_str_attach(value_media);
+
+        if(attach_single == NULL){
+            ffree(value_media);
+            continue;
+        }
+
+        attach[id_file] = attach_single;
+        ffree(value_media);
+        id_file++;
+    }
+
+    if(id_file == 0){
+        ffree(attach);
+        attach = NULL;
+    }
+    else{
+        attach[id_file] = NULL;
+    }
+
+    close_json(sjson);
+
+    return attach;
 }
 
-char * input_media_video(char * identify, char * type, char * media, char * thumb, char * caption, char * parse_mode,
-                                int32_t width, int32_t duration, bool supports_streaming){
-
-}

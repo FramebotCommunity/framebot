@@ -1,23 +1,23 @@
 #include <framebot/framebot.h>
 
-#define BOLD         "\033[1m"
-#define COLOR_RESET  "\033[0m"
-#define BLACK  "\033[22;30m"
-#define RED    "\033[22;31m"
-#define GREEN  "\033[22;32m"
-#define BROWN  "\033[22;33m"
-#define BLUE   "\033[22;34m"
-#define MAGENTA "\033[22;35m"
-#define CYAN   "\033[22;36m"
-#define GRAY   "\033[22;37m"
-#define DARK_GRAY "\033[01;30m"
-#define LIGHT_RED "\033[01;31m"
-#define LIGHT_GREEN "\033[01;32m"
-#define YELLOW "\033[01;33m"
-#define LIGHT_BLUE "\033[01;34m"
-#define LIGHT_MAGENTA "\033[01;35m"
-#define LIGHT_CYAN "\033[01;36m"
-#define WHITE "\033[01;37m"
+#define BOLD         "\\033[1m"
+#define COLOR_RESET  "\\033[0m"
+#define BLACK  "\\033[22;30m"
+#define RED    "\\033[22;31m"
+#define GREEN  "\\033[22;32m"
+#define BROWN  "\\033[22;33m"
+#define BLUE   "\\033[22;34m"
+#define MAGENTA "\\033[22;35m"
+#define CYAN   "\\033[22;36m"
+#define GRAY   "\\033[22;37m"
+#define DARK_GRAY "\\033[01;30m"
+#define LIGHT_RED "\\033[01;31m"
+#define LIGHT_GREEN "\\033[01;32m"
+#define YELLOW "\\033[01;33m"
+#define LIGHT_BLUE "\\033[01;34m"
+#define LIGHT_MAGENTA "\\033[01;35m"
+#define LIGHT_CYAN "\\033[01;36m"
+#define WHITE "\\033[01;37m"
 
 
 Bot * _bot = NULL;
@@ -43,7 +43,7 @@ int _document(){
 	}
 	else{
 		Error *error = get_error();
-		printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -56,7 +56,7 @@ int _document(){
 	}
 	else{
 		Error *error = get_error();
-		printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -69,7 +69,7 @@ int _document(){
 	}
 	else{
 		Error *error = get_error();
-		printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -81,7 +81,7 @@ int _document(){
 	}
 	else{
 		Error *error = get_error();
-		printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -95,7 +95,7 @@ int _document(){
 	}
 	else{
 		Error *error = get_error();
-		printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 

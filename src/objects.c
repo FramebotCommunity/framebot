@@ -430,6 +430,8 @@ void venue_free(Venue *_venue){
  ** https://core.telegram.org/bots/api#message
  **/
 void message_free(Message *message){
+    Message *next;
+
     if(message == NULL)
         return ;
 
@@ -553,8 +555,23 @@ void message_free(Message *message){
     if(message->media_group_id)
         ffree(message->media_group_id);
 
+    if(message->next != NULL){
+        next = message->next;
+        message_free(next);
+    }
+
     ffree(message);
     message = NULL;
+}
+
+
+void message_add(Message *dest, Message *src){
+    Message *tmp = dest;
+
+    while (tmp->next)
+        tmp = tmp->next;
+
+    tmp->next = src;
 }
 
 

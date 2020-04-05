@@ -164,7 +164,7 @@ MemStore * call_method_upload(const char * token, IFile ifile){
     CURLcode res;
     curl_mime * form = NULL;
     curl_mimepart * field = NULL;
-    
+
     curl = curl_easy_init();
     if(curl) {
         /* Create the form */
@@ -618,10 +618,40 @@ MemStore * call_method_upload(const char * token, IFile ifile){
                         curl_mime_data(field, ifile.chatphoto.filename, CURL_ZERO_TERMINATED);
                 }
             break;
+            case SENDMEDIAGROUP:
+                method = "sendMediaGroup";
+                if(ifile.mediagroup.chat_id != NULL){
+                    field = curl_mime_addpart(form);
+                    curl_mime_name(field, "chat_id");
+                    curl_mime_data(field, ifile.mediagroup.chat_id, CURL_ZERO_TERMINATED);
+                }
 
+
+                if(ifile.mediagroup.media != NULL){
+                    field = curl_mime_addpart(form);
+                    curl_mime_name(field, "media");
+                    curl_mime_data(field, ifile.mediagroup.media, CURL_ZERO_TERMINATED);
+                }
+
+                char **field_file= ifile.mediagroup.field;
+                char **filename = ifile.mediagroup.filename;
+                int id = 0;
+
+
+                if(field_file != NULL){
+                    while(field_file[id] != NULL){
+                        field = curl_mime_addpart(form);
+                        curl_mime_name(field, field_file[id]);
+                        curl_mime_filedata(field, filename[id]);
+
+                        id++;
+                    }
+                }
+
+            break;
         }
 
-        MemStore * buff = NULL;;
+        MemStore * buff = NULL;
         size_t url_size;
         char * url = NULL;
 

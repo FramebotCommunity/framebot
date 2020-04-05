@@ -48,6 +48,7 @@
 #define IKM   6  /* InlineKeyboardMarkup field InlineKeyboardMarkup */
 #define IKM_STR "InlineKeyboardMarkup" /* InlineKeyboardMarkup field InlineKeyboardMarkup */
 
+#define ERROR_CONTENT_FIELD "{\"ok\":false,\"error_code\":406,\"description\":\"Not Acceptable: field count and filename not equal\"}"
 
 typedef struct _id_markup {
 	char * identify;
@@ -80,6 +81,7 @@ Voice * voice_parse(json_t *json);
 Contact * contact_parse(json_t *json);
 Location * location_parse(json_t *json);
 Venue * venue_parse(json_t *json);
+Message * message_array_parse (json_t * json);
 Message * message_parse(json_t *json);
 Update * update_parse(json_t *json);
 User * get_me_parse(char * json);
@@ -98,9 +100,11 @@ SuccessfulPayment * successful_payment_parse(json_t * json);
 File * file_parse(json_t * json);
 UserProfilePhotos * user_profile_photos_parse(json_t * json);
 ChatPhoto * chat_photo_parse(json_t * json);
+char **media_group_media_parse(char * media);
 
 char * input_media_photo(char * identify, char * type, char * media, char * caption, char * parse_mode);
 char * input_media_video(char * identify, char * type, char * media, char * thumb, char * caption, char * parse_mode,
                                 int32_t width, int32_t duration, bool supports_streaming);
+
 
 #endif

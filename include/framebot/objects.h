@@ -539,6 +539,8 @@ void bot_free(Bot *bot);
 
 void chosen_inline_result_free(ChosenInlineResult *cir);
 
+void message_add(Message *dest, Message *src);
+
 void update_free(Update *oupdate);
 void update_add(Update *dest, Update *src);
 Update *update_get(Update *u, int index);

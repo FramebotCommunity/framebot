@@ -41,7 +41,7 @@ bool accpte_payment(){
 
 			Error *error = get_error();
 			if(error)
-				printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+				printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 
 			framebot->up_shipping_query = framebot->up_shipping_query->next;
 			update_free(s_q);
@@ -54,7 +54,7 @@ bool accpte_payment(){
 
 			Error *error = get_error();
 			if(error)
-				printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+				printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 
 			framebot->up_pre_checkout_query = framebot->up_pre_checkout_query->next;
 			update_free(p_c_q);
@@ -80,7 +80,7 @@ void test_invoice(){
 	else{
 		Error *error = get_error();
 		if(error)
-			printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+			printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -98,7 +98,7 @@ void test_invoice(){
 	else{
 		Error *error = get_error();
 		if(error)
-			printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+			printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -116,7 +116,7 @@ void test_invoice(){
 	else{
 		Error *error = get_error();
 		if(error)
-			printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+			printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -132,7 +132,7 @@ void test_invoice(){
 	else{
 		Error *error = get_error();
 		if(error)
-			printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+			printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -148,7 +148,7 @@ void test_invoice(){
 	else{
 		Error *error = get_error();
 		if(error)
-			printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+			printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -164,7 +164,7 @@ void test_invoice(){
 	else{
 		Error *error = get_error();
 		if(error)
-			printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+			printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -180,7 +180,7 @@ void test_invoice(){
 	else{
 		Error *error = get_error();
 		if(error)
-			printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+			printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -196,7 +196,7 @@ void test_invoice(){
 	else{
 		Error *error = get_error();
 		if(error)
-			printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+			printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -212,7 +212,7 @@ void test_invoice(){
 	else{
 		Error *error = get_error();
 		if(error)
-			printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+			printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -228,7 +228,7 @@ void test_invoice(){
 	else{
 		Error *error = get_error();
 		if(error)
-			printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+			printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -244,7 +244,7 @@ void test_invoice(){
 	else{
 		Error *error = get_error();
 		if(error)
-			printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+			printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -260,7 +260,7 @@ void test_invoice(){
 	else{
 		Error *error = get_error();
 		if(error)
-			printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+			printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 }

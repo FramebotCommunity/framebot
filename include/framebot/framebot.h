@@ -550,7 +550,8 @@ bool answer_inline_query( Bot *bot, char *inline_query_id, char *results, int64_
 void set_notification(bool disable_notification);
 bool get_notification();
 
-Message * send_media_group(char * chat_id, char * media, bool disable_notification, char * reply_to_message_id);
+Message * send_media_group(Bot *bot, char * chat_id, char * media, char **filename, bool disable_notification, int64_t reply_to_message_id);
+Message * send_media_group_chat(Bot *bot, int64_t chat_id, char * media, char **filename, bool disable_notification, int64_t reply_to_message_id);
 
 
 #endif

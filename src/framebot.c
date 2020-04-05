@@ -1919,8 +1919,70 @@ bool answer_inline_query( Bot *bot, char *inline_query_id, char *results, int64_
     return result;
 }
 
-Message * send_media_group(char * chat_id, char * media, bool disable_notification, char * reply_to_message_id){
+Message * send_media_group(Bot *bot, char * chat_id, char * media, char **filename, bool disable_notification, int64_t reply_to_message_id){
+
+    Message * message;
+
+    IFile ifile;
+
+    ifile.type = SENDMEDIAGROUP;
+
+    ifile.mediagroup.chat_id = chat_id;
+
+    ifile.mediagroup.media = media;
+
+    ifile.mediagroup.disable_notification = CONVERT_BOOLEAN_STR(disable_notification);
+
+    ifile.mediagroup.reply_to_message_id = api_ltoa(reply_to_message_id);
+
+    ifile.mediagroup.field = media_group_media_parse(ifile.mediagroup.media);
+
+    ifile.mediagroup.filename = filename;
+
+    MemStore * input;
+    refjson  * s_json;
 
 
+    if(verify_count_field(ifile.mediagroup.filename, ifile.mediagroup.field) == true){
+        input = call_method_upload(bot->token, ifile);
+    }
+    else{
+        input = (MemStore *)calloc(1, sizeof(MemStore));
+        input->content = calloc(1, strlen(ERROR_CONTENT_FIELD) + 1);
+        strcpy(input->content, ERROR_CONTENT_FIELD);
+    }
 
+    ffree_array_str(ifile.mediagroup.field);
+    ffree(ifile.mediagroup.reply_to_message_id);
+
+    if(!input){
+        return NULL;
+    }
+
+    s_json = start_json(input->content);
+    mem_store_free(input);
+    if(!s_json){
+        return NULL;
+    }
+
+    message = message_array_parse(s_json->content);
+
+    close_json(s_json);
+
+    return message;
 }
+
+Message * send_media_group_chat(Bot *bot, int64_t chat_id, char * media, char **filename, bool disable_notification, int64_t reply_to_message_id){
+  Message * message;
+    char * cchat_id;
+    
+    cchat_id = api_ltoa(chat_id);
+
+    message = send_media_group(bot, cchat_id, media, filename,
+                            disable_notification, reply_to_message_id);
+
+    ffree(cchat_id);
+
+    return message;
+}
+
