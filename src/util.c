@@ -16,7 +16,7 @@ int api_tg_exist(const char *filename){
 
 
 bool verify_count_field(char **filename, char **field){
-	int field_id = 0, file_id = 0, id = 0, end = 0;
+	int field_id = 0, file_id = 0, id = 0;
 
 	while(filename != NULL){
 		if(filename[id] != NULL) {

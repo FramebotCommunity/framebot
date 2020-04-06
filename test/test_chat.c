@@ -48,7 +48,7 @@ int _func(){
 		printf("false\n");
 		Error *e1 = get_error();
 		if(e1)
-			printf("false\ncode:%ld | description:%s\n", e1->error_code, e1->description);
+			printf("false\ncode:%d | description:%s\n", e1->error_code, e1->description);
 		exit(-1);
 	}
 
@@ -68,7 +68,7 @@ int _func(){
 		printf("false\n");
 		Error *e1 = get_error();
 		if(e1)
-			printf("false\ncode:%ld | description:%s\n", e1->error_code, e1->description);
+			printf("false\ncode:%d | description:%s\n", e1->error_code, e1->description);
 		exit(-1);
 	}
 	
@@ -85,7 +85,7 @@ int _func(){
 		printf("false\n");
 		Error *e1 = get_error();
 		if(e1)
-			printf("false\ncode:%ld | description:%s\n", e1->error_code, e1->description);
+			printf("false\ncode:%d | description:%s\n", e1->error_code, e1->description);
 		exit(-1);
 	}
 
@@ -100,7 +100,7 @@ int _func(){
 		printf("false\n");
 		Error *e1 = get_error();
 		if(e1)
-			printf("false\ncode:%ld | description:%s\n", e1->error_code, e1->description);
+			printf("false\ncode:%d | description:%s\n", e1->error_code, e1->description);
 		exit(-1);
 	}
 
@@ -121,7 +121,7 @@ int _func(){
 		printf("false\n");
 		Error *e1 = get_error();
 		if(e1)
-			printf("false\ncode:%ld | description:%s\n", e1->error_code, e1->description);
+			printf("false\ncode:%d | description:%s\n", e1->error_code, e1->description);
 		exit(-1);
 	}
 
@@ -137,7 +137,7 @@ int _func(){
 		printf("false\n");
 		Error *e1 = get_error();
 		if(e1)
-			printf("false\ncode:%ld | description:%s\n", e1->error_code, e1->description);
+			printf("false\ncode:%d | description:%s\n", e1->error_code, e1->description);
 		exit(-1);
 	}*/
 
@@ -155,7 +155,7 @@ int _func(){
 		printf("false");
 		Error *e1 = get_error();
 		if(e1)
-			printf("false\ncode:%ld | description:%s\n", e1->error_code, e1->description);
+			printf("false\ncode:%d | description:%s\n", e1->error_code, e1->description);
 		exit(-1);
 	}
 
@@ -171,7 +171,7 @@ int _func(){
     	printf("false");
 		Error *e1 = get_error();
 		if(e1)
-			printf("false\ncode:%ld | description:%s\n", e1->error_code, e1->description);
+			printf("false\ncode:%d | description:%s\n", e1->error_code, e1->description);
 		exit(-1);
     }
 
@@ -183,7 +183,7 @@ int _func(){
 		printf("false\n");
 		Error *e1 = get_error();
 		if(e1)
-			printf("false\ncode:%ld | description:%s\n", e1->error_code, e1->description);
+			printf("false\ncode:%d | description:%s\n", e1->error_code, e1->description);
 		exit(-1);
 	}
 

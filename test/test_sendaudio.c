@@ -39,7 +39,7 @@ int _audio(){
 	}
 	else{
 		Error *error = get_error();
-		printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -53,7 +53,7 @@ int _audio(){
 	}
 	else{
 		Error *error = get_error();
-		printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -67,7 +67,7 @@ int _audio(){
 	}
 	else{
 		Error *error = get_error();
-		printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -81,7 +81,7 @@ int _audio(){
 	}
 	else{
 		Error *error = get_error();
-		printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -95,7 +95,7 @@ int _audio(){
 	}
 	else{
 		Error *error = get_error();
-		printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -109,7 +109,7 @@ int _audio(){
 	}
 	else{
 		Error *error = get_error();
-		printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -122,7 +122,7 @@ int _audio(){
 	}
 	else{
 		Error *error = get_error();
-		printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -134,7 +134,7 @@ int _audio(){
 	}
 	else{
 		Error *error = get_error();
-		printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 

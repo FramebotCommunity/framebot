@@ -36,7 +36,7 @@ int _file(){
 	else{
 		Error *error = get_error();
 		if(error)
-			printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+			printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 	
 		exit(-1);
 	}
@@ -66,12 +66,6 @@ int main(int argc, char *argv[]){
 	Update *update = _update->up_message;
 	File *ofile = NULL;
 	int id = 0;
-	char *dir;
-
-	if(argv[2] == NULL)
-		dir = NULL;
-	else
-		dir = argv[3];
 
 	while(update){
 		if(update->message->audio){
@@ -101,7 +95,7 @@ int main(int argc, char *argv[]){
 		}
 		else if(update->message->video_note){
 			ofile = get_file(_bot, update->message->voice->file_id);
-			printf("%d.\nuser:%s\ndate:%ld\nfile_path:%s\n\n", update->message->from->username, update->message->date, ofile->file_path);
+			printf("%d.\nuser:%s\ndate:%ld\nfile_path:%s\n\n", id++, update->message->from->username, update->message->date, ofile->file_path);
 			file_download(_bot, ofile, namefile);
 		}
 

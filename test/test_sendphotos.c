@@ -39,7 +39,7 @@ int _photo(){
 	else{
 		Error *error = get_error();
 		if(error)
-			printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+			printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 	}
 
 	printf(WHITE "Send username ......... " COLOR_RESET);
@@ -50,7 +50,7 @@ int _photo(){
 	}
 	else{
 		Error *error = get_error();
-		printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -62,7 +62,7 @@ int _photo(){
 	}
 	else{
 		Error *error = get_error();
-		printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -74,7 +74,7 @@ int _photo(){
 	}
 	else{
 		Error *error = get_error();
-		printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 
@@ -87,7 +87,7 @@ int _photo(){
 	}
 	else{
 		Error *error = get_error();
-		printf(RED"false\ncode:%ld | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 		exit(-1);
 	}
 

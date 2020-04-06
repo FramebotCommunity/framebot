@@ -18,8 +18,8 @@ bool accpte_payment(){
 
 	Framebot *framebot = NULL;
 
-	char *tax = "{\"id\":\"product_12\", \"title\":\"Product_12\", \"prices\":[{\"label\":\"tax\", \"amount\":515}]}";
-	char *notax = "";
+/*	char *tax = "{\"id\":\"product_12\", \"title\":\"Product_12\", \"prices\":[{\"label\":\"tax\", \"amount\":515}]}";
+	char *notax = "";*/
 
 	while(1){
 		if(framebot == NULL)

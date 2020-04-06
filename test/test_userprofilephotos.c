@@ -42,7 +42,7 @@ int main(int argc, char *argv[]){
 	else{
 		Error * error = show_error();
 		if(error)
-			printf("error_code=%ld error_descriptio=n%s\n", error->error_code, error->description);
+			printf("error_code=%d error_descriptio=n%s\n", error->error_code, error->description);
 	}
 
 	return 0;
