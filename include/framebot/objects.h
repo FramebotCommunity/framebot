@@ -109,11 +109,24 @@ typedef struct _photo_size{
 
 typedef struct _document{
     char *file_id;
+    char *file_unique_id;
     PhotoSize *thumb;
     char *file_name;
     char *mime_type;
-    int64_t file_size;
-} Document, Animation;
+    int32_t file_size;
+} Document;
+
+typedef struct _animation {
+    char *file_id;
+    char *file_unique_id;
+    int32_t width;
+    int32_t heigth;
+    int32_t duration;
+    PhotoSize *thumb;
+    char *file_name;
+    char *mime_type;
+    int32_t file_size;
+} Animation;
 
 typedef struct _game{
     char *title;
