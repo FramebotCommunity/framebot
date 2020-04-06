@@ -1586,7 +1586,7 @@ Poll * stop_poll(Bot *bot, char *chat_id, int64_t message_id, char *reply_markup
     return poll;
 }
 
-Poll * stop_poll_chat(Bot *bot, int64_t *chat_id, int64_t message_id, char *reply_markup){
+Poll * stop_poll_chat(Bot *bot, int64_t chat_id, int64_t message_id, char *reply_markup){
 
     Poll *poll;
     char * cchat_id;
@@ -1594,7 +1594,7 @@ Poll * stop_poll_chat(Bot *bot, int64_t *chat_id, int64_t message_id, char *repl
     cchat_id = api_ltoa(chat_id);
 
 
-    poll = send_stop_poll(bot, cchat_id, message_id, reply_markup);
+    poll = stop_poll(bot, cchat_id, message_id, reply_markup);
     ffree(cchat_id);
 
     return poll;

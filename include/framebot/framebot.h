@@ -581,6 +581,6 @@ Message * send_media_group(Bot *bot, char * chat_id, char * media, char **filena
 Message * send_media_group_chat(Bot *bot, int64_t chat_id, char * media, char **filename, bool disable_notification, int64_t reply_to_message_id);
 
 Poll * stop_poll(Bot *bot, char *chat_id, int64_t message_id, char *reply_markup);
-Poll * stop_poll_chat(Bot *bot, int64_t *chat_id, int64_t message_id, char *reply_markup);
+Poll * stop_poll_chat(Bot *bot, int64_t chat_id, int64_t message_id, char *reply_markup);
 
 #endif

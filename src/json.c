@@ -346,35 +346,60 @@ Document * document_parse(json_t *json){
 
 Animation * animation_parse(json_t *json){
     Animation *object = NULL;
-    json_t * panimation = json;
 
-    if(json_is_object(panimation)){
+    if(json_is_object(json)){
+
         object = (Animation *) calloc(1, sizeof(Animation));
         if(!object)
             return NULL;
 
-        json_t *file_id, *thumb, *file_name, *mime_type, *file_size;
+        json_t *file_id, *file_unique_id, *width, *heigth, *duration, *thumb,
+                    *file_name, *mime_type, *file_size;
+        size_t length, i;
 
-        file_id = json_object_get(panimation,"file_id");
+        file_id = json_object_get(json, "file_id");
         object->file_id = alloc_string(json_string_value(file_id));
 
-        thumb = json_object_get(panimation,"thumb");
-        object->thumb = photo_size_parse(thumb);
+        file_unique_id = json_object_get(json, "file_unique_id");
+        object->file_unique_id = alloc_string(json_string_value(file_unique_id));
 
-        file_name = json_object_get(panimation,"file_name");
+        width = json_object_get(json, "width");
+        object->width = json_integer_value(width);
+
+        heigth = json_object_get(json, "heigth");
+        object->heigth = json_integer_value(heigth);
+
+        duration = json_object_get(json, "duration");
+        object->duration = json_integer_value(duration);
+
+        thumb = json_object_get( json, "photo" );
+        length = json_array_size(thumb);
+        PhotoSize *_temp_p = NULL;
+        object->thumb = photo_size_parse(json_array_get(thumb, 0));
+        if (length > 0) {
+            for (i = 1; i < length; i++) {
+                _temp_p = photo_size_parse(json_array_get(thumb, i));
+                if (_temp_p)
+                    photo_size_add(object->thumb, _temp_p);
+            }
+        }
+
+        file_name = json_object_get(json, "file_name");
         object->file_name = alloc_string(json_string_value(file_name));
 
-        mime_type = json_object_get(panimation,"mime_type");
+        mime_type = json_object_get(json, "mime_type");
         object->mime_type = alloc_string(json_string_value(mime_type));
 
-        file_size = json_object_get(panimation,"file_size");
+        file_size = json_object_get(json, "file_size");
         object->file_size = json_integer_value(file_size);
 
         return object;
     }
 
+
     return NULL;
 }
+
 
 Game * game_parse(json_t *json){
     Game *object = NULL;
@@ -848,7 +873,7 @@ Message * message_parse(json_t *json){
         json_t *from, *chat, *forward_from, *forward_from_chat, *reply_to_message, 
         *audio, *document, *animation, *game, *sticker, *video, *voice, *video_note, *contact,
         *location, *venue, *poll, *dice, *left_chat_member, *pinned_message,
-        *invoice, *successful_payment, *passaport_data, *reply_markup;
+        *invoice, *successful_payment, *passport_data, *reply_markup;
 
         from = json_object_get( pmessage, "from" );
         message->from = user_parse(from);
@@ -872,7 +897,7 @@ Message * message_parse(json_t *json){
         message->document = document_parse(document);
 
         animation = json_object_get( pmessage, "animation" );
-        message->animation = document_parse(animation);
+        message->animation = animation_parse(animation);
 
         game = json_object_get( pmessage, "game" );
         message->game = game_parse(game);
@@ -917,10 +942,10 @@ Message * message_parse(json_t *json){
         message->successful_payment = successful_payment_parse(successful_payment);
 
         passport_data = json_object_get( pmessage, "passport_data" );
-        message->passport_data = successful_payment_parse(passport_data);
+        message->passport_data = passport_data_parse(passport_data);
 
         reply_markup = json_object_get( pmessage, "reply_markup" );
-        message->reply_markup = successful_payment_parse(reply_markup);
+        message->reply_markup = inline_keyboard_markup_parse(reply_markup);
 
         return message;
     }
@@ -1542,6 +1567,17 @@ PollOption *poll_option_parse(json_t *json){
     }
 
     return NULL;
+}
+
+
+PassportData *passport_data_parse(json_t * josn){
+
+    return NULL;
+}
+
+
+inline_keyboard_markup_parse(){
+    
 }
 
 
