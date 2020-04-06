@@ -1552,6 +1552,23 @@ Message * send_poll(Bot *bot, char *chat_id, char *question, char *options, bool
 }
 
 
+Message * send_poll_chat(Bot *bot, int64_t chat_id, char *question, char *options, bool is_anonymous, char *type, bool allows_multiple_answers, int32_t correct_option_id,
+                    bool is_closed, bool disable_notification, int32_t reply_to_message_id, char *reply_markup){
+
+    Message * message;
+    char * cchat_id;
+
+    cchat_id = api_ltoa(chat_id);
+
+
+    message =  send_poll(bot, cchat_id, question, options, is_anonymous,
+                    type, allows_multiple_answers, correct_option_id, is_closed,
+                    disable_notification, reply_to_message_id, reply_markup);
+    ffree(cchat_id);
+
+    return message;
+}
+
 Poll * stop_poll(Bot *bot, char *chat_id, int64_t message_id, char *reply_markup){
 
     Poll *poll;
@@ -1569,23 +1586,20 @@ Poll * stop_poll(Bot *bot, char *chat_id, int64_t message_id, char *reply_markup
     return poll;
 }
 
+Poll * stop_poll_chat(Bot *bot, int64_t *chat_id, int64_t message_id, char *reply_markup){
 
-Message * send_poll_chat(Bot *bot, int64_t chat_id, char *question, char *options, bool is_anonymous, char *type, bool allows_multiple_answers, int32_t correct_option_id,
-                    bool is_closed, bool disable_notification, int32_t reply_to_message_id, char *reply_markup){
-
-    Message * message;
+    Poll *poll;
     char * cchat_id;
 
     cchat_id = api_ltoa(chat_id);
 
 
-    message =  send_poll(bot, cchat_id, question, options, is_anonymous,
-                    type, allows_multiple_answers, correct_option_id, is_closed,
-                    disable_notification, reply_to_message_id, reply_markup);
+    poll = send_stop_poll(bot, cchat_id, message_id, reply_markup);
     ffree(cchat_id);
 
-    return message;
+    return poll;
 }
+
 
 /**
  * sendChatAction
