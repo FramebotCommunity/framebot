@@ -1440,6 +1440,91 @@ ChatPhoto * chat_photo_parse(json_t * json){
 }
 
 
+Poll * poll_parse(json_t * json){
+
+    Poll *object = NULL;
+
+    if(json_is_object(json)){
+        object = (Poll *) calloc(1, sizeof(Poll));
+        if(!object){
+            return NULL;
+        }
+
+        json_t *id, *question, *options, *total_voter_count,
+        *is_closed, *is_anonymous, *type, *allows_multiple_answers, *correct_option_id;
+        size_t length, i;
+
+        id = json_object_get(json, "id");
+        object->id = alloc_string(json_string_value(id));
+
+        question = json_object_get(json, "question");
+        object->question = alloc_string(json_string_value(question));
+
+        options = json_object_get(json, "options");
+        length = json_array_size( options );
+        object->options = poll_option_parse( json_array_get(options, 0));
+        if(length > 0){
+            for(i = 1; i < length; i++){
+                PollOption *next;
+                next = poll_option_parse(options);
+
+                if(next)
+                    poll_option_add(object->options, next);
+            }
+        }
+
+        total_voter_count = json_object_get(json, "total_voter_count");
+        object->total_voter_count = json_integer_value(total_voter_count);
+
+        is_closed = json_object_get(json, "is_closed");
+        object->is_closed = json_boolean_value(is_closed);
+
+        is_anonymous = json_object_get(json, "is_anonymous");
+        object->is_anonymous = json_boolean_value(is_anonymous);
+
+        type = json_object_get(json, "type");
+        object->type = alloc_string(json_string_value(type));
+
+        allows_multiple_answers = json_object_get(json, "allows_multiple_answers");
+        object->allows_multiple_answers = json_boolean_value(allows_multiple_answers);
+
+        correct_option_id = json_object_get(json, "correct_option_id");
+        object->correct_option_id = json_integer_value(correct_option_id);
+
+        return object;
+    }
+
+    return NULL;
+}
+
+
+PollOption *poll_option_parse(json_t *json){
+
+    PollOption *object = NULL;
+
+    if(json_is_object(json)){
+        object = (PollOption *) calloc(1, sizeof(PollOption));
+        if(!object){
+            return NULL;
+        }
+
+        json_t *text, *voter_count;
+
+        text = json_object_get(json, "text");
+        object->text = alloc_string(json_string_value(text));
+
+        voter_count = json_object_get(json, "voter_count");
+        object->voter_count = json_integer_value(voter_count);
+
+        object->next = NULL;
+
+        return object;
+    }
+
+    return NULL;
+}
+
+
 char **media_group_media_parse(char * media){
     refjson *sjson = NULL;
     json_t *json = NULL, *json_media = NULL;

@@ -1551,6 +1551,25 @@ Message * send_poll(Bot *bot, char *chat_id, char *question, char *options, bool
     return message;   
 }
 
+
+Poll * stop_poll(Bot *bot, char *chat_id, int64_t message_id, char *reply_markup){
+
+    Poll *poll;
+    refjson * s_json;
+
+    s_json = generic_method_call(bot->token, API_stopPoll, chat_id, message_id, CONVERT_URL_STRING(reply_markup));
+
+    if(!s_json)
+        return NULL;
+
+    poll = poll_parse(s_json->content);
+
+    close_json( s_json );
+
+    return poll;
+}
+
+
 Message * send_poll_chat(Bot *bot, int64_t chat_id, char *question, char *options, bool is_anonymous, char *type, bool allows_multiple_answers, int32_t correct_option_id,
                     bool is_closed, bool disable_notification, int32_t reply_to_message_id, char *reply_markup){
 

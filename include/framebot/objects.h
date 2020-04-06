@@ -205,6 +205,7 @@ typedef struct _venue{
 typedef struct _pool_option {
     char * text;
     int voter_count;
+    struct _pool_option *next;
 } PollOption;
 
 typedef struct _pool_answer {
@@ -581,5 +582,8 @@ Error *get_error();
 
 void framebot_add( Framebot *framebot, Update *update );
 void framebot_free(Framebot *framebot);
+
+void poll_option_free(PollOption *poll_option);
+void poll_option_add(PollOption *dest, PollOption *src);
 
 #endif // OBJECTS_H_

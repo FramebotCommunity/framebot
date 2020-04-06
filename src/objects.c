@@ -1192,3 +1192,49 @@ void framebot_free(Framebot *framebot) {
 
     ffree(framebot);
 }
+
+
+void poll_free(Poll *poll){
+
+    if(!poll)
+        return;
+
+    if(poll->id){
+        ffree(poll->id);
+    }
+    if(poll->question){
+        ffree(poll->question);
+    }
+    if(poll->options){
+        poll_option_free(poll->options);
+    }
+    if(poll->type){
+        ffree(poll->type);
+    }
+
+    ffree(poll);
+    poll = NULL;
+}
+
+
+void poll_option_add(PollOption *dest, PollOption *src){
+    PollOption *tmp = dest;
+
+    while (tmp->next)
+        tmp = tmp->next;
+
+    tmp->next = src;
+}
+
+void poll_option_free(PollOption *poll_option){
+
+    if(!poll_option)
+        return;
+
+    if (poll_option->next){
+        poll_option_free(poll_option->next);
+    }
+
+    ffree(poll_option);
+}
+

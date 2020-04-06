@@ -101,6 +101,8 @@ File * file_parse(json_t * json);
 UserProfilePhotos * user_profile_photos_parse(json_t * json);
 ChatPhoto * chat_photo_parse(json_t * json);
 char **media_group_media_parse(char * media);
+PollOption *poll_option_parse(json_t *json);
+Poll * poll_parse(json_t * json);
 
 char * input_media_photo(char * identify, char * type, char * media, char * caption, char * parse_mode);
 char * input_media_video(char * identify, char * type, char * media, char * thumb, char * caption, char * parse_mode,
