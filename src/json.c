@@ -746,7 +746,7 @@ Message * message_parse(json_t *json){
         message->migrate_from_chat_id = json_integer_value( migrate_from_chat_id );
 
         //Strings
-        json_t *forward_signature, *forward_sender_name, *media_group_id, *author_signature, *text, *caption, *new_chat_title,
+        json_t *forward_signature, *forward_sender_name, *author_signature, *text, *caption, *new_chat_title,
         *media_group_id, *author_signature, *connected_website;
 
         forward_signature = json_object_get( pmessage, "forward_signature" );
@@ -847,7 +847,7 @@ Message * message_parse(json_t *json){
 
         //Objects
         json_t *from, *chat, *forward_from, *forward_from_chat, *reply_to_message, 
-        *audio, *document, *animaion, *game, *photo, *sticker, *video, *voice, *video_note, *contact,
+        *audio, *document, *animaion, *game, *sticker, *video, *voice, *video_note, *contact,
         *location, *venue, *poll, *dice, *left_chat_member, *pinned_message,
         *invoice, *successful_payment, *passaport_data, *reply_markup;
 
