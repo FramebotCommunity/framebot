@@ -927,7 +927,7 @@ Message * message_parse(json_t *json){
         message->poll = poll_parse(poll);
 
         dice = json_object_get( pmessage, "dice" );
-        message->dice = venue_parse(dice);
+        message->dice = dice_parse(dice);
 
         left_chat_member = json_object_get( pmessage, "left_chat_member" );
         message->left_chat_member = user_parse(left_chat_member);
@@ -1576,10 +1576,30 @@ PassportData *passport_data_parse(json_t * josn){
 }
 
 
-inline_keyboard_markup_parse(){
-    
+InlineKeyboardMarkup *inline_keyboard_markup_parse(){
+
+    return  NULL;
 }
 
+
+Dice *dice_parse(json_t *json){
+    Dice *object = NULL;
+
+     if(json_is_object(json)){
+        object = (Dice *) calloc(1, sizeof(Dice));
+        if(!object)
+            return NULL;
+
+        json_t *value;
+
+        value = json_object_get(json, "value");
+        object->value = json_integer_value(value);
+
+        return object;
+    }
+
+    return NULL;
+}
 
 char **media_group_media_parse(char * media){
     refjson *sjson = NULL;

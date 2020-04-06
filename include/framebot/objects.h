@@ -241,6 +241,11 @@ typedef struct _poll {
 } Poll;
 
 
+typedef struct _dice {
+    int32_t value;
+} Dice;
+
+
 typedef struct _passport_file {
     char *file_id;
     char *file_unique_id;
@@ -396,6 +401,7 @@ typedef struct _message{
     Location *location;
     Venue *venue;
     Poll *poll;
+    Dice *dice;
     User *new_chat_members;
     User *left_chat_member;
     char *new_chat_title;
