@@ -746,8 +746,20 @@ Message * message_parse(json_t *json){
         message->migrate_from_chat_id = json_integer_value( migrate_from_chat_id );
 
         //Strings
-        json_t *text, *caption, *new_chat_title, *forward_signature,
+        json_t *forward_signature, *forward_sender_name, *media_group_id, *author_signature, *text, *caption, *new_chat_title,
         *media_group_id, *author_signature, *connected_website;
+
+        forward_signature = json_object_get( pmessage, "forward_signature" );
+        message->forward_signature = alloc_string( json_string_value( forward_signature));
+
+        forward_sender_name = json_object_get(pmessage, "forward_sender_name");
+        message->forward_sender_name = alloc_string( json_string_value( forward_sender_name));
+
+        media_group_id = json_object_get( pmessage, "media_group_id" );
+        message->media_group_id = alloc_string( json_string_value( media_group_id ));
+
+        author_signature = json_object_get( pmessage, "author_signature" );
+        message->author_signature = alloc_string( json_string_value( author_signature ));
 
         text = json_object_get( pmessage, "text" );
         message->text = alloc_string( json_string_value( text ));
@@ -757,15 +769,6 @@ Message * message_parse(json_t *json){
 
         new_chat_title = json_object_get( pmessage, "new_chat_title" );
         message->new_chat_title = alloc_string( json_string_value( new_chat_title ));
-
-        forward_signature = json_object_get( pmessage, "forward_signature" );
-        message->forward_signature = alloc_string( json_string_value( forward_signature));
-
-        media_group_id = json_object_get( pmessage, "media_group_id" );
-        message->media_group_id = alloc_string( json_string_value( media_group_id ));
-
-        author_signature = json_object_get( pmessage, "author_signature" );
-        message->author_signature = alloc_string( json_string_value( author_signature ));
 
         connected_website = json_object_get( pmessage, "connected_website" );
         message->connected_website = alloc_string( json_string_value( connected_website ));
@@ -787,6 +790,20 @@ Message * message_parse(json_t *json){
         }
         message->entities = oentities;
 
+        caption_entities = json_object_get( pmessage, "caption_entities" );
+        length = json_array_size(caption_entities);
+        MessageEntity * ocaption_entities = NULL, *_temp_ce = NULL;
+        ocaption_entities = message_entity_parse(json_array_get(caption_entities, 0));
+        if (length > 0) {
+            for (i = 1; i < length; i++) {
+                _temp_ce = message_entity_parse(json_array_get(caption_entities, i));
+                if (_temp_ce)
+                    message_entity_add(ocaption_entities, _temp_ce);
+            }
+        }
+        message->caption_entities = ocaption_entities;
+
+
         photo = json_object_get( pmessage, "photo" );
         length = json_array_size(photo);
         PhotoSize * ophoto = NULL, *_temp_p = NULL;
@@ -800,31 +817,6 @@ Message * message_parse(json_t *json){
         }
         message->photo = ophoto;
 
-        new_chat_photo = json_object_get( pmessage, "new_chat_photo" );
-        length = json_array_size(new_chat_photo);
-        PhotoSize * onew_chat_photo = NULL, *_temp_ncp = NULL;
-        onew_chat_photo = photo_size_parse(json_array_get(new_chat_photo, 0));
-        if (length > 0) {
-            for (i = 1; i < length; i++) {
-                _temp_ncp = photo_size_parse(json_array_get(new_chat_photo, i));
-                if (_temp_ncp)
-                    photo_size_add(onew_chat_photo, _temp_ncp);
-            }
-        }
-        message->new_chat_photo= onew_chat_photo;
-
-        caption_entities = json_object_get( pmessage, "caption_entities" );
-        length = json_array_size(caption_entities);
-        MessageEntity * ocaption_entities = NULL, *_temp_ce = NULL;
-        ocaption_entities = message_entity_parse(json_array_get(caption_entities, 0));
-        if (length > 0) {
-            for (i = 1; i < length; i++) {
-                _temp_ce = message_entity_parse(json_array_get(caption_entities, i));
-                if (_temp_ce)
-                    message_entity_add(ocaption_entities, _temp_ce);
-            }
-        }
-        message->caption_entities = ocaption_entities;
 
         new_chat_members = json_object_get( pmessage, "new_chat_members" );
         length = json_array_size(new_chat_members);
@@ -839,11 +831,25 @@ Message * message_parse(json_t *json){
         }
         message->new_chat_members = onew_chat_members;
 
+        new_chat_photo = json_object_get( pmessage, "new_chat_photo" );
+        length = json_array_size(new_chat_photo);
+        PhotoSize * onew_chat_photo = NULL, *_temp_ncp = NULL;
+        onew_chat_photo = photo_size_parse(json_array_get(new_chat_photo, 0));
+        if (length > 0) {
+            for (i = 1; i < length; i++) {
+                _temp_ncp = photo_size_parse(json_array_get(new_chat_photo, i));
+                if (_temp_ncp)
+                    photo_size_add(onew_chat_photo, _temp_ncp);
+            }
+        }
+        message->new_chat_photo= onew_chat_photo;
+
+
         //Objects
         json_t *from, *chat, *forward_from, *forward_from_chat, *reply_to_message, 
-        *audio, *document, *game, *sticker, *video, *voice, *video_note, *contact, 
-        *location, *venue, *left_chat_member, *pinned_message, 
-        *invoice, *successful_payment;
+        *audio, *document, *animaion, *game, *photo, *sticker, *video, *voice, *video_note, *contact,
+        *location, *venue, *poll, *dice, *left_chat_member, *pinned_message,
+        *invoice, *successful_payment, *passaport_data, *reply_markup;
 
         from = json_object_get( pmessage, "from" );
         message->from = user_parse(from);
@@ -865,6 +871,9 @@ Message * message_parse(json_t *json){
 
         document = json_object_get( pmessage, "document" );
         message->document = document_parse(document);
+
+        animation = json_object_get( pmessage, "animation" );
+        message->animation = document_parse(animation);
 
         game = json_object_get( pmessage, "game" );
         message->game = game_parse(game);
@@ -890,6 +899,12 @@ Message * message_parse(json_t *json){
         venue = json_object_get( pmessage, "venue" );
         message->venue = venue_parse(venue);
 
+        poll = json_object_get( pmessage, "poll" );
+        message->poll = poll_parse(poll);
+
+        dice = json_object_get( pmessage, "dice" );
+        message->dice = venue_parse(dice);
+
         left_chat_member = json_object_get( pmessage, "left_chat_member" );
         message->left_chat_member = user_parse(left_chat_member);
 
@@ -901,6 +916,12 @@ Message * message_parse(json_t *json){
 
         successful_payment = json_object_get( pmessage, "successful_payment" );
         message->successful_payment = successful_payment_parse(successful_payment);
+
+        passport_data = json_object_get( pmessage, "passport_data" );
+        message->passport_data = successful_payment_parse(passport_data);
+
+        reply_markup = json_object_get( pmessage, "reply_markup" );
+        message->reply_markup = successful_payment_parse(reply_markup);
 
         return message;
     }
