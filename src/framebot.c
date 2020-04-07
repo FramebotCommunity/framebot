@@ -2062,3 +2062,36 @@ Message * send_media_group_chat(Bot *bot, int64_t chat_id, char * media, char **
     return message;
 }
 
+
+bool set_chat_administrator_custom_title(Bot *bot, char *chat_id, int64_t user_id, char *custom_title){
+
+    bool result;
+    refjson *s_json;
+
+    s_json = generic_method_call(bot->token, API_setChatAdministratorCustomTitle, user_id, custom_title);
+
+    if(!s_json)
+        return -1;
+
+    result = json_is_true(s_json->content);
+
+    close_json(s_json);
+
+    return result;
+}
+
+bool set_chat_administrator_custom_title_chat(Bot *bot, int64_t chat_id, int64_t user_id, char *custom_title){
+
+    bool result;
+    char * cchat_id;
+
+    cchat_id = api_ltoa(chat_id);
+
+    result = set_chat_administrator_custom_title(bot, cchat_id, user_id,
+                            custom_title);
+
+    ffree(cchat_id);
+
+    return result;
+}
+

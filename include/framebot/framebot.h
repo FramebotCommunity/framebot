@@ -273,6 +273,11 @@
 ?disable_notification=%s\
 ?reply_to_message_id=%ld"
 
+#define API_setChatAdministratorCustomTitle "setChatAdministratorCustomTitle\
+?chat_id=%s\
+&user_id=%ld\
+&custom_title=%s"
+
 /* analyze parameter API methods */
 #define CONVERT_BOOLEAN_STR(p) (p > 0 ? "true" : "false")
 #define CONVERT_URL_STRING(p) (p == NULL ? "" : p)
@@ -582,5 +587,9 @@ Message * send_media_group_chat(Bot *bot, int64_t chat_id, char * media, char **
 
 Poll * stop_poll(Bot *bot, char *chat_id, int64_t message_id, char *reply_markup);
 Poll * stop_poll_chat(Bot *bot, int64_t chat_id, int64_t message_id, char *reply_markup);
+
+bool set_chat_administrator_custom_title(Bot *bot, char *chat_id, int64_t user_id, char *custom_title);
+bool set_chat_administrator_custom_title_chat(Bot *bot, int64_t schat_id, int64_t user_id, char *custom_title);
+
 
 #endif
