@@ -803,7 +803,7 @@ refjson *generic_method_call (const char *token, char *formats, ...) {
 
     char *method_base = vsformat(formats, params);
     MemStore *response = call_method(token, method_base);
-    printf("--(%s)\n", method_base);
+
     ffree(method_base);
 
     if(response){
