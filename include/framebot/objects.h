@@ -47,9 +47,20 @@ typedef struct _bot{
 
 typedef struct _chat_photo{
     char *small_file_id;
+    char *small_file_unique_id;
     char *big_file_id;
+    char *big_file_unique_id;
 } ChatPhoto;
 
+
+typedef struct _photo_size{
+    char *file_id;
+    int width;
+    int height;
+    int64_t file_size;
+
+    struct _photo_size *next;
+} PhotoSize;
 
 typedef struct _chat_permissions {
     bool can_send_messages;
@@ -91,21 +102,15 @@ typedef struct _message_entity{
 
 typedef struct _audio{
     char *file_id;
+    char *file_unique_id;
     int64_t duration;
     char *performer;
     char *title;
     char *mime_type;
     int64_t file_size;
+    PhotoSize *thumb;
 } Audio;
 
-typedef struct _photo_size{
-    char *file_id;
-    int width;
-    int height;
-    int64_t file_size;
-
-    struct _photo_size *next;
-} PhotoSize;
 
 typedef struct _document{
     char *file_id;
@@ -182,6 +187,7 @@ typedef struct _video{
 
 typedef struct video_note{
     char *file_id;
+    char *file_unique_id;
     int64_t length;
     int64_t duration;
     PhotoSize *thumb;
@@ -190,6 +196,7 @@ typedef struct video_note{
 
 typedef struct _voice{
     char *file_id;
+    char *file_unique_id;
     int64_t duration;
     char *mime_type;
     int64_t file_size;
@@ -200,6 +207,7 @@ typedef struct _contact{
     char *first_name;
     char *last_name;
     int64_t user_id;
+    char *vcard;
 } Contact;
 
 typedef struct _location{
@@ -458,6 +466,8 @@ typedef struct _update{
     CallbackQuery *callback_query;
     ShippingQuery *shipping_query;
     PreCheckoutQuery *pre_checkout_query;
+    Poll * poll;
+    PollAnswer * poll_answer;
 
 	struct _update *next;
 } Update;
@@ -473,8 +483,8 @@ typedef struct {
     Update *up_callback_query;
     Update *up_shipping_query;
     Update *up_pre_checkout_query;
-    Poll * poll;
-    PollAnswer * poll_answer;
+    Update * poll;
+    Update * poll_answer;
 } Framebot;
 
 typedef struct _chat_member {

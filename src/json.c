@@ -952,6 +952,7 @@ Message * message_parse(json_t *json){
     return NULL;
 }
 
+
 Update * update_parse(json_t *json){
     Update *object = NULL;
     json_t * pupdate = json;
@@ -963,7 +964,7 @@ Update * update_parse(json_t *json){
 
         json_t *update_id, *message, *edited_message, *channel_post,
         *edited_channel_post, *inline_query, *chosen_inline_result,
-        *callback_query, *shipping_query, *pre_checkout_query;
+        *callback_query, *shipping_query, *pre_checkout_query, *poll, *poll_answer;
 
         update_id = json_object_get(pupdate,"update_id");
         object->update_id = json_integer_value(update_id);
@@ -995,6 +996,12 @@ Update * update_parse(json_t *json){
         pre_checkout_query = json_object_get(pupdate, "pre_checkout_query");
         object->pre_checkout_query = pre_checkout_query_parse(pre_checkout_query);
 
+        poll = json_object_get(pupdate, "poll");
+        object->poll = poll_parse(poll);
+
+        poll_answer = json_object_get(pupdate, "poll_answer");
+        object->poll_answer = poll_answer_parse(poll_answer);
+
         object->next = NULL;
 
         return object;
@@ -1002,6 +1009,7 @@ Update * update_parse(json_t *json){
 
     return NULL;
 }
+
 
 ChatMember *chat_member_parse (json_t *json) {
     ChatMember *object = NULL;
