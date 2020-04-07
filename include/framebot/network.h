@@ -40,6 +40,7 @@
 #define SENDVIDEONOTE 600
 #define SETCHATPHOTO 700
 #define SENDMEDIAGROUP 800
+#define SENDANIMATION  900
 
 typedef struct _mem_store {
     char *content;
@@ -132,7 +133,7 @@ typedef struct _chatphoto{
 	char * filename;
 } scphoto;
 
-typedef struct _mediagroup {
+typedef struct _smgroup {
 	int type;
 	char *chat_id;
 	char * media;
@@ -141,6 +142,21 @@ typedef struct _mediagroup {
 	char * reply_to_message_id;
 	char **field;
 } smgroup;
+
+typedef struct _sanimation {
+	int type;
+	char * chat_id;
+	char * animation;
+	char * duration;
+	char * width;
+	char * height;
+	char * thumb;
+	char * caption;
+	char * parse_mode;
+	char * disable_notification;
+	char * reply_to_message_id;
+	char * reply_markup;
+} sanimation;
 
 typedef union _ifile{
 	int type;
@@ -152,6 +168,7 @@ typedef union _ifile{
 	svoice voice;
 	svNote videonote;
 	smgroup mediagroup;
+	sanimation animation;
 } IFile;
 
 

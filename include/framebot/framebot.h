@@ -591,5 +591,11 @@ Poll * stop_poll_chat(Bot *bot, int64_t chat_id, int64_t message_id, char *reply
 bool set_chat_administrator_custom_title(Bot *bot, char *chat_id, int64_t user_id, char *custom_title);
 bool set_chat_administrator_custom_title_chat(Bot *bot, int64_t schat_id, int64_t user_id, char *custom_title);
 
+Message * send_animation_chat(Bot *bot, int64_t chat_id, char *animation, int32_t duration, int32_t width,
+                    int32_t heigth, char *thumb, char * caption, char * parse_mode, bool disable_notification,
+                    int32_t reply_to_message_id, char * reply_markup );
+Message * send_animation(Bot *bot, char * chat_id, char *animation, int32_t duration, int32_t width,
+                    int32_t heigth, char *thumb, char * caption, char * parse_mode, bool disable_notification,
+                    int32_t reply_to_message_id, char * reply_markup );
 
 #endif

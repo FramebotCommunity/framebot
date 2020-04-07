@@ -312,6 +312,94 @@ MemStore * call_method_upload(const char * token, IFile ifile){
                     curl_mime_data(field, ifile.audio.reply_markup, CURL_ZERO_TERMINATED);
                 }
             break;
+            case SENDANIMATION:
+                method = "sendAnimation";
+
+                /* Unique identifier for the target */
+                if(ifile.animation.chat_id != NULL){
+                    field = curl_mime_addpart(form);
+                    curl_mime_name(field, "chat_id");
+                    curl_mime_data(field, ifile.animation.chat_id, CURL_ZERO_TERMINATED);
+                }
+
+                /* upload file */
+                if(ifile.animation.animation != NULL){
+                    field = curl_mime_addpart(form);
+                    curl_mime_name(field, "animation");
+                    if(api_tg_exist(ifile.animation.animation))
+                        curl_mime_filedata(field, ifile.animation.animation);
+                    else
+                        curl_mime_data(field, ifile.animation.animation, CURL_ZERO_TERMINATED);
+                }
+
+                /* Document caption */
+                if(ifile.animation.duration != NULL){
+                    field = curl_mime_addpart(form);
+                    curl_mime_name(field, "duration");
+                    curl_mime_data(field, ifile.animation.duration, CURL_ZERO_TERMINATED);
+                }
+
+                /* Document caption */
+                if(ifile.animation.width != NULL){
+                    field = curl_mime_addpart(form);
+                    curl_mime_name(field, "width");
+                    curl_mime_data(field, ifile.animation.width, CURL_ZERO_TERMINATED);
+                }
+
+                /* Document caption */
+                if(ifile.animation.height != NULL){
+                    field = curl_mime_addpart(form);
+                    curl_mime_name(field, "height");
+                    curl_mime_data(field, ifile.animation.height, CURL_ZERO_TERMINATED);
+                }
+
+
+                /* upload file */
+                if(ifile.animation.thumb != NULL){
+                    field = curl_mime_addpart(form);
+                    curl_mime_name(field, "thumb");
+                    if(api_tg_exist(ifile.animation.thumb))
+                        curl_mime_filedata(field, ifile.animation.thumb);
+                    else
+                        curl_mime_data(field, ifile.animation.thumb, CURL_ZERO_TERMINATED);
+                }
+
+
+                /* Document caption */
+                if(ifile.animation.caption != NULL){
+                    field = curl_mime_addpart(form);
+                    curl_mime_name(field, "caption");
+                    curl_mime_data(field, ifile.animation.caption, CURL_ZERO_TERMINATED);
+                }
+
+                /* Document parse_mode */
+                if(ifile.animation.parse_mode != NULL){
+                    field = curl_mime_addpart(form);
+                    curl_mime_name(field, "parse_mode");
+                    curl_mime_data(field, ifile.animation.parse_mode, CURL_ZERO_TERMINATED);
+                }
+
+
+                /* Sends the message silently */
+                if(ifile.animation.disable_notification != NULL){
+                    field = curl_mime_addpart(form);
+                    curl_mime_name(field, "disable_notification");
+                    curl_mime_data(field, ifile.animation.disable_notification, CURL_ZERO_TERMINATED);
+                }
+
+                /* If the message is a reply, ID of the original message */
+                if(ifile.animation.reply_to_message_id != NULL){
+                    field = curl_mime_addpart(form);
+                    curl_mime_name(field, "reply_to_message_id");
+                    curl_mime_data(field, ifile.animation.reply_to_message_id, CURL_ZERO_TERMINATED);
+                }
+
+                if(ifile.animation.reply_markup != NULL){
+                    field = curl_mime_addpart(form);
+                    curl_mime_name(field, "reply_markup");
+                    curl_mime_data(field, ifile.animation.reply_markup, CURL_ZERO_TERMINATED);
+                }
+            break;
             case SENDDOCUMENT:
                 method = "sendDocument";
 

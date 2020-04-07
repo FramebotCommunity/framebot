@@ -2095,3 +2095,89 @@ bool set_chat_administrator_custom_title_chat(Bot *bot, int64_t chat_id, int64_t
     return result;
 }
 
+
+Message * send_animation(Bot *bot, char * chat_id, char *animation, int32_t duration, int32_t width,
+                    int32_t height, char *thumb, char * caption, char * parse_mode, bool disable_notification,
+                    int32_t reply_to_message_id, char * reply_markup ){
+
+    Message * message;
+
+        IFile ifile;
+
+    ifile.type = SENDVIDEO;
+
+    /* Unique identifier for the target */
+    ifile.animation.chat_id = chat_id;
+
+    /* Audio file to send */
+    ifile.animation.animation = animation;
+
+    /* Duration of the audio in seconds */
+    ifile.animation.duration = IFILE_INT(duration);
+
+    /* animation width */
+    ifile.animation.width = IFILE_INT(width);
+
+    /* animation height */
+    ifile.animation.height = IFILE_INT(height);
+
+    ifile.animation.thumb = thumb;
+
+    /* Audio caption, 0-200 characters */
+    ifile.animation.caption = caption;
+
+    /* parse mode MODE_HTML or MODE_MARKDOWN */
+    ifile.animation.parse_mode = parse_mode;
+
+
+    /* Sends the message silently */
+    ifile.animation.disable_notification = CONVERT_BOOLEAN_STR(disable_notification);
+
+    /* If the message is a reply, ID of the original message */
+    ifile.animation.reply_to_message_id = IFILE_LONG(reply_to_message_id);
+
+    ifile.animation.reply_markup = CONVERT_URL_STRING(reply_markup);
+
+    MemStore * input;
+    refjson *s_json;
+
+    input = call_method_upload(bot->token, ifile);
+    ffree(ifile.animation.duration);
+    ffree(ifile.animation.width);
+    ffree(ifile.animation.height);
+    ffree(ifile.animation.reply_to_message_id);
+    if(!input)
+        return NULL;
+
+    s_json = start_json(input->content);
+    mem_store_free(input);
+    if(!s_json)
+        return NULL;
+
+    message = message_parse(s_json->content);
+
+    close_json(s_json);
+
+    return message;
+
+}
+
+
+Message * send_animation_chat(Bot *bot, int64_t chat_id, char *animation, int32_t duration, int32_t width,
+                    int32_t height, char *thumb, char * caption, char * parse_mode, bool disable_notification,
+                    int32_t reply_to_message_id, char * reply_markup ){
+    
+    Message * message;
+    char * cchat_id;
+    
+    cchat_id = api_ltoa(chat_id);
+
+    message = send_animation(bot, cchat_id, animation, duration, width,
+                    height,thumb, caption, parse_mode, disable_notification,
+                    reply_to_message_id, reply_markup );
+
+    ffree(cchat_id);
+
+    return message;
+}
+
