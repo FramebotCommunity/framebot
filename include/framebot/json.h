@@ -106,6 +106,7 @@ Poll * poll_parse(json_t * json);
 PassportData *passport_data_parse(json_t * josn);
 InlineKeyboardMarkup *inline_keyboard_markup_parse();
 Dice *dice_parse(json_t *json);
+PollAnswer *poll_answer_parse(json_t *json);
 
 char * input_media_photo(char * identify, char * type, char * media, char * caption, char * parse_mode);
 char * input_media_video(char * identify, char * type, char * media, char * thumb, char * caption, char * parse_mode,

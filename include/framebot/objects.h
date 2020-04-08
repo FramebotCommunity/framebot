@@ -232,7 +232,7 @@ typedef struct _pool_option {
 typedef struct _pool_answer {
     char * poll_id;
     User * user;
-    int * option_ids;
+    int  option_ids;
 } PollAnswer;
 
 

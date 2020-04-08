@@ -1658,3 +1658,32 @@ char **media_group_media_parse(char * media){
     return attach;
 }
 
+
+PollAnswer *poll_answer_parse(json_t *json){
+    PollAnswer *object = NULL;
+
+    if(json_is_object(json)){
+        object = (PollAnswer *) calloc(1, sizeof(PollAnswer));
+        if(!object){
+            return NULL;
+        }
+
+        json_t *poll_id, *user, *option_ids;
+
+        poll_id = json_object_get(json, "poll_id");
+        object->poll_id = alloc_string(json_string_value(poll_id));
+
+        user = json_object_get(json, "user");
+        object->user = user_parse(user);
+
+        option_ids = json_object_get(json, "option_ids");
+        object->option_ids = json_integer_value(option_ids);
+
+
+        return object;
+    }
+
+    return NULL;
+}
+
+
