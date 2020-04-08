@@ -278,6 +278,10 @@
 &user_id=%ld\
 &custom_title=%s"
 
+#define API_setChatPermissions "setChatPermissions\
+?chat_id=%s\
+&parmissions=%s"
+
 /* analyze parameter API methods */
 #define CONVERT_BOOLEAN_STR(p) (p > 0 ? "true" : "false")
 #define CONVERT_URL_STRING(p) (p == NULL ? "" : p)
@@ -597,5 +601,8 @@ Message * send_animation_chat(Bot *bot, int64_t chat_id, char *animation, int32_
 Message * send_animation(Bot *bot, char * chat_id, char *animation, int32_t duration, int32_t width,
                     int32_t heigth, char *thumb, char * caption, char * parse_mode, bool disable_notification,
                     int32_t reply_to_message_id, char * reply_markup );
+
+bool set_chat_permissions(Bot *bot, char * chat_id, ChatPermissions *chat_permissions);
+bool set_chat_permissions_chat(Bot *bot, int64_t chat_id, ChatPermissions *chat_permissions);
 
 #endif

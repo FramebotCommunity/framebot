@@ -2181,3 +2181,53 @@ Message * send_animation_chat(Bot *bot, int64_t chat_id, char *animation, int32_
     return message;
 }
 
+
+bool set_chat_permissions(Bot *bot, char * chat_id, ChatPermissions *chat_permissions){
+
+    bool result;
+    json_t *json = NULL;
+    char * str = NULL;
+    refjson *s_json = NULL;
+
+    json = json_pack("{s:b,s:b,s:b,s:b,s:b,s:b,s:b,s:b}",
+        "can_send_messages", chat_permissions->can_send_messages,
+        "can_send_media_messages", chat_permissions->can_send_media_messages,
+        "can_send_polls", chat_permissions->can_send_polls,
+        "can_send_other_messages", chat_permissions->can_send_other_messages,
+        "can_add_web_page_previews", chat_permissions->can_add_web_page_previews,
+        "can_change_info", chat_permissions->can_change_info,
+        "can_invite_users", chat_permissions->can_invite_users,
+        "can_pin_messages", chat_permissions->can_pin_messages);
+
+    str = json_dumps(json, JSON_COMPACT);
+
+    s_json = generic_method_call(bot->token, API_setChatPermissions, chat_id, str);
+
+    ffree(str);
+
+    if(!s_json)
+        return -1;
+
+    result = json_is_true(s_json->content);
+
+    close_json(s_json);
+
+    return result;
+}
+
+
+
+bool set_chat_permissions_chat(Bot *bot, int64_t chat_id, ChatPermissions *chat_permissions){
+
+    bool result;
+    char * cchat_id;
+
+    cchat_id = api_ltoa(chat_id);
+
+    result = set_chat_permissions(bot, cchat_id, chat_permissions);
+
+    ffree(cchat_id);
+
+    return result;
+}
+
