@@ -1,6 +1,6 @@
 /**
  * MIT License
- * Copyright (c) 2016 - 20120 Giancarlo Rocha & Ródgger Bruno
+ * Copyright (c) 2016 - 2020 Giancarlo Rocha & Ródgger Bruno
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -69,11 +69,8 @@
 #define API_restrictChatMember "restrictChatMember\
 ?chat_id=%s\
 &user_id=%ld\
-&until_date=%ld\
-&can_send_messages=%s\
-&can_send_media_messages=%s\
-&can_send_other_messages=%s\
-&can_add_web_page_previews=%s"
+&permissions=%s\
+&until_date=%ld"
 
 #define API_unbanChatMember "unbanChatMember\
 ?chat_id=%s\
@@ -488,13 +485,9 @@ bool unban_chat_member_chat (Bot *bot, int64_t chat_id, int64_t user_id);
 
 /* restrictChatMember */
 bool restrict_chat_member (Bot *bot, char *chat_id, int64_t user_id,
-        int64_t until_date, bool can_send_messages,
-        bool can_send_media_messages, bool can_send_other_messages,
-        bool can_add_web_page_previews);
+           ChatPermissions *permissions, int64_t until_date );
 bool restrict_chat_member_chat (Bot *bot, int64_t chat_id, int64_t user_id,
-        int64_t until_date, bool can_send_messages,
-        bool can_send_media_messages, bool can_send_other_messages,
-        bool can_add_web_page_previews);
+           ChatPermissions *permissions, int64_t until_date );
 
 /* promoteChatMember */
 bool promote_chat_member (Bot *bot, char *chat_id, int64_t user_id, bool can_change_info,

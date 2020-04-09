@@ -380,19 +380,29 @@ bool kick_chat_member_chat (Bot *bot, int64_t chat_id, int64_t user_id, int64_t 
  * Returns True on success.
  * https://core.telegram.org/bots/api#restrictchatmember
  */
-bool restrict_chat_member (Bot *bot, char *chat_id, int64_t user_id, int64_t until_date,
-            bool can_send_messages, bool can_send_media_messages, bool can_send_other_messages,
-            bool can_add_web_page_previews) {
+bool restrict_chat_member (Bot *bot, char *chat_id, int64_t user_id,
+           ChatPermissions *permissions, int64_t until_date ) {
 
-    int result;
+    bool result;
+    json_t *json = NULL;
+    char *str = NULL;
     refjson *s_json;
 
-    s_json = generic_method_call(bot->token, API_restrictChatMember,
-        chat_id, user_id, until_date,
-        CONVERT_BOOLEAN_STR(can_send_messages),
-        CONVERT_BOOLEAN_STR(can_send_media_messages),
-        CONVERT_BOOLEAN_STR(can_send_other_messages),
-        CONVERT_BOOLEAN_STR(can_add_web_page_previews) );
+    json = json_pack("{s:b,s:b,s:b,s:b,s:b,s:b,s:b,s:b}",
+        "can_send_messages", permissions->can_send_messages,
+        "can_send_media_messages", permissions->can_send_media_messages,
+        "can_send_polls", permissions->can_send_polls,
+        "can_send_other_messages", permissions->can_send_other_messages,
+        "can_add_web_page_previews", permissions->can_add_web_page_previews,
+        "can_change_info", permissions->can_change_info,
+        "can_invite_users", permissions->can_invite_users,
+        "can_pin_messages", permissions->can_pin_messages);
+
+    str = json_dumps(json, JSON_COMPACT);
+
+    s_json = generic_method_call(bot->token, API_restrictChatMember, chat_id, user_id, str, until_date);
+
+    ffree(str);
 
     if(!s_json)
         return -1;
@@ -405,17 +415,15 @@ bool restrict_chat_member (Bot *bot, char *chat_id, int64_t user_id, int64_t unt
 }
 
 
-bool restrict_chat_member_chat (Bot *bot, int64_t chat_id, int64_t user_id, int64_t until_date,
-            bool can_send_messages, bool can_send_media_messages, bool can_send_other_messages,
-            bool can_add_web_page_previews) {
+bool restrict_chat_member_chat (Bot *bot, int64_t chat_id, int64_t user_id,
+           ChatPermissions *permissions, int64_t until_date ) {
     bool result;
     char * cchat_id;
 
     cchat_id = api_ltoa(chat_id);
 
-    result = restrict_chat_member (bot, cchat_id, user_id, until_date,
-            can_send_messages, can_send_media_messages, can_send_other_messages,
-            can_add_web_page_previews);
+    result = restrict_chat_member (bot, cchat_id, user_id,
+           permissions, until_date);
 
     ffree(cchat_id);
 
