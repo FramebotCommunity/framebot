@@ -279,6 +279,13 @@
 ?chat_id=%s\
 &parmissions=%s"
 
+#define API_answerCallbackQuery "answerCallbackQuery\
+?callback_query_id=%s\
+&text=%s\
+&show_alert=%s\
+&url=%s\
+&cache_time=%d"
+
 /* analyze parameter API methods */
 #define CONVERT_BOOLEAN_STR(p) (p > 0 ? "true" : "false")
 #define CONVERT_URL_STRING(p) (p == NULL ? "" : p)
@@ -597,5 +604,7 @@ Message * send_animation(Bot *bot, char * chat_id, char *animation, int32_t dura
 
 bool set_chat_permissions(Bot *bot, char * chat_id, ChatPermissions *chat_permissions);
 bool set_chat_permissions_chat(Bot *bot, int64_t chat_id, ChatPermissions *chat_permissions);
+
+bool answer_callback_query(Bot * bot, char *callback_query_id, char *text, bool show_alert, char * url, int32_t cache_time);
 
 #endif

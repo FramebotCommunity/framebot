@@ -2239,3 +2239,19 @@ bool set_chat_permissions_chat(Bot *bot, int64_t chat_id, ChatPermissions *chat_
     return result;
 }
 
+bool answer_callback_query(Bot *bot, char *callback_query_id, char *text, bool show_alert, char * url, int32_t cache_time){
+    bool result;
+    refjson *s_json;
+
+    s_json = generic_method_call(bot->token, API_answerCallbackQuery, callback_query_id, text, CONVERT_BOOLEAN_STR(show_alert), url, cache_time);
+
+    if(!s_json)
+        return -1;
+
+    result = json_is_true(s_json->content);
+
+    close_json(s_json);
+
+    return result;
+}
+
