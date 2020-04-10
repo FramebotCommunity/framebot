@@ -2255,3 +2255,17 @@ bool answer_callback_query(Bot *bot, char *callback_query_id, char *text, bool s
     return result;
 }
 
+BotCommand *getMyCommands(Bot *bot){
+
+    BotCommand *bot_command;
+    refjson *s_json;
+
+    s_json = generic_method_call(bot->token, API_getMyCommands);
+
+    bot_command = bot_command_array_parse(s_json->content);
+
+    close_json(s_json);
+
+    return bot_command;
+}
+

@@ -1238,3 +1238,61 @@ void poll_option_free(PollOption *poll_option){
     ffree(poll_option);
 }
 
+void bot_command_free(BotCommand *bot_command){
+
+    if(!bot_command)
+        return;
+
+    if(bot_command->command)
+        ffree(bot_command->command);
+
+    if(bot_command->description)
+        ffree(bot_command->description);
+
+    bot_command_free(bot_command->next);
+    ffree(bot_command);
+}
+
+
+bool bot_command_single_free(BotCommand *bot_command, char *command){
+
+    BotCommand *previous = NULL, *now = NULL, *after =NULL;
+
+    if(!bot_command)
+        return false;
+
+    now = bot_command;
+
+    while(strcmp(now->command, command) != 0){
+        if(now->next)
+            return false;
+
+        previous = now;
+        now = now->next;
+    }
+
+    after = now->next;
+
+    previous->next = after;
+
+    if(now->command)
+        ffree(now->command);
+
+    if(now->description)
+        ffree(now->description);
+
+    ffree(now);
+
+    return true;
+}
+
+void bot_command_add(BotCommand *dest, BotCommand *src){
+
+    BotCommand *tmp = dest;
+
+    while (tmp->next)
+        tmp = tmp->next;
+
+    tmp->next = src;
+}
+

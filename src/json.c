@@ -1687,3 +1687,49 @@ PollAnswer *poll_answer_parse(json_t *json){
 }
 
 
+BotCommand *bot_command_array_parse(json_t *json){
+
+    BotCommand *object = NULL, *next = NULL;
+    json_t *array = json;
+    size_t length, i;
+
+    length = json_array_size( array );
+    if (length > 0) {
+        object = bot_command_parse( json_array_get(array, 0));
+
+        for (i = 1; i < length; i++) {
+            next = bot_command_parse(json_array_get(array, i));
+            if (next)
+                bot_command_add(object, next);
+        }
+    }
+
+    return object;
+}
+
+
+BotCommand *bot_command_parse(json_t *json){
+
+    BotCommand *object = NULL;
+
+    if(json_is_object(json)){
+        object = (BotCommand *) calloc(1, sizeof(BotCommand));
+        if(!object){
+            return NULL;
+        }
+
+        json_t *command, *description;
+
+        command = json_object_get(json, "command");
+        object->command = alloc_string(json_string_value(command));
+
+        description = json_object_get(json, "description");
+        object->description = alloc_string(json_string_value(description));
+
+        object->next = NULL;
+
+    }
+
+    return NULL;
+}
+

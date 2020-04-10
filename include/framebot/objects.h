@@ -100,6 +100,12 @@ typedef struct _message_entity{
     struct _message_entity *next;
 } MessageEntity;
 
+typedef struct _bot_command {
+    char *command;
+    char *description;
+    struct _bot_command * next;
+} BotCommand;
+
 typedef struct _audio{
     char *file_id;
     char *file_unique_id;
@@ -614,5 +620,9 @@ void framebot_free(Framebot *framebot);
 
 void poll_option_free(PollOption *poll_option);
 void poll_option_add(PollOption *dest, PollOption *src);
+
+void bot_command_free(BotCommand *bot_command);
+bool bot_command_single_free(BotCommand *bot_command, char *command);
+void bot_command_add(BotCommand *dest, BotCommand *src);
 
 #endif // OBJECTS_H_
