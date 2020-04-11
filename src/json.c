@@ -96,6 +96,9 @@ void error_parse(refjson * json){
  **   char *last_name;
  **   char *username;
  **   char *language_code;
+ **   bool can_join_groups;
+ **   bool can_read_all_group_messages;
+ **   bool supports_inline_queries;
  **
  **   struct _user *next;
  ** } User;
@@ -109,7 +112,8 @@ User * user_parse(json_t *json){
         if(!object)
             return NULL;
 
-        json_t *id, *is_bot, *first_name, *last_name, *username, *language_code;
+        json_t *id, *is_bot, *first_name, *last_name, *username, *language_code,
+            *can_join_groups, *can_read_all_group_messages, *supports_inline_queries;
 
         id = json_object_get(puser, "id");
         object->id = json_integer_value(id);
@@ -127,7 +131,16 @@ User * user_parse(json_t *json){
         object->username = alloc_string(json_string_value(username));
 
         language_code = json_object_get(puser, "language_code");
-        object->language_code =alloc_string(json_string_value(language_code));
+        object->language_code = alloc_string(json_string_value(language_code));
+
+        can_join_groups = json_object_get(puser, "can_join_groups");
+        object->can_join_groups = json_boolean_value(can_join_groups);
+
+        can_read_all_group_messages = json_object_get(puser, "can_read_all_group_messages");
+        object->can_read_all_group_messages = json_boolean_value(can_read_all_group_messages);
+
+        supports_inline_queries = json_object_get(puser, "supports_inline_queries");
+        object->supports_inline_queries = json_boolean_value(supports_inline_queries);
 
         object->next = NULL;
 
@@ -145,11 +158,11 @@ User * user_parse(json_t *json){
  **    char *username;
  **    char *first_name;
  **    char *last_name;
- **    bool all_members_are_administrators:1;
  **    ChatPhoto *photo;
  **    char *description;
  **    char *invite_link;
  **    struct _message *pinned_message;
+ **    int32_t slow_mode_delay;
  **    char *sticker_set_name;
  **    bool can_set_sticker_set:1;
  **} Chat;
@@ -164,9 +177,9 @@ Chat * chat_parse(json_t *json){
             return NULL;
 
         json_t *id, *type, *title, *username, *first_name,
-        *last_name, *all_members_are_administrators, *photo,
-        *description, *invite_link, *pinned_message,
-        *sticker_set_name, *can_set_sticker_set;
+        *last_name, *photo, *description, *invite_link, 
+        *pinned_message, *slow_mode_delay, *sticker_set_name,
+        *can_set_sticker_set;
 
         id = json_object_get(pchat,"id");
         object->id = json_integer_value(id);
@@ -186,10 +199,6 @@ Chat * chat_parse(json_t *json){
         last_name = json_object_get(pchat,"last_name");
         object->last_name = alloc_string(json_string_value(last_name));
 
-        all_members_are_administrators = json_object_get(pchat,"all_members_are_administrators");
-        object->all_members_are_administrators =
-                json_boolean_value(all_members_are_administrators);
-
         photo = json_object_get(json, "photo");
         object->photo = chat_photo_parse(photo);
 
@@ -201,6 +210,9 @@ Chat * chat_parse(json_t *json){
         
         pinned_message = json_object_get(json, "pinned_message");
         object->pinned_message = message_parse(pinned_message);
+
+        slow_mode_delay = json_object_get(json, "slow_mode_delay");
+        object->slow_mode_delay = json_integer_value(slow_mode_delay);
 
         sticker_set_name = json_object_get(json, "sticker_set_name");
         object->sticker_set_name = alloc_string(json_string_value(sticker_set_name));
@@ -222,7 +234,7 @@ MessageEntity * message_entity_parse(json_t *json){
         if(!object)
             return NULL;
 
-        json_t *type, *offset, *length, *url, *user;
+        json_t *type, *offset, *length, *url, *user, *language;
 
         type = json_object_get(pmessage_entity,"type");
         object->type = alloc_string(json_string_value(type));
@@ -238,6 +250,9 @@ MessageEntity * message_entity_parse(json_t *json){
 
         user = json_object_get(pmessage_entity,"user");
         object->user = user_parse(user);
+
+        language = json_object_get(pmessage_entity,"language");
+        object->language = alloc_string(json_string_value(language));
 
         object->next = NULL;
 
@@ -256,10 +271,14 @@ Audio * audio_parse(json_t *json){
         if(!object)
             return NULL;
 
-        json_t *file_id, *duration, *performer, *title, *mime_type, *file_size;
+        json_t *file_id, *file_unique_id, *duration, *performer,
+                *title, *mime_type, *file_size, *thumb;
 
         file_id = json_object_get(paudio,"file_id");
         object->file_id = alloc_string(json_string_value(file_id));
+
+        file_unique_id = json_object_get(paudio,"file_unique_id");
+        object->file_unique_id = alloc_string(json_string_value(file_unique_id));
 
         duration = json_object_get(paudio,"duration");
         object->duration = json_integer_value(duration);
@@ -276,6 +295,9 @@ Audio * audio_parse(json_t *json){
         file_size = json_object_get(paudio,"file_size");
         object->file_size = json_integer_value(file_size);
 
+        thumb = json_object_get(paudio,"thumb");
+        object->thumb = photo_size_parse(thumb);
+
         return object;
     }
     return NULL;
@@ -290,10 +312,13 @@ PhotoSize * photo_size_parse(json_t *json) {
         if(!object)
             return NULL;
 
-        json_t *file_id, *width, *height, *file_size;
+        json_t *file_id, *file_unique_id, *width, *height, *file_size;
 
         file_id = json_object_get(pphoto_size,"file_id");
         object->file_id = alloc_string(json_string_value(file_id));
+
+        file_unique_id = json_object_get(pphoto_size,"file_unique_id");
+        object->file_unique_id = alloc_string(json_string_value(file_unique_id));
 
         width = json_object_get(pphoto_size,"width");
         object->width = (int)json_integer_value(width);
@@ -312,6 +337,15 @@ PhotoSize * photo_size_parse(json_t *json) {
     return NULL;
 }
 
+
+/*typedef struct _document{
+    char *file_id;
+    char *file_unique_id;
+    PhotoSize *thumb;
+    char *file_name;
+    char *mime_type;
+    int32_t file_size;
+} Document;*/
 Document * document_parse(json_t *json){
     Document *object = NULL;
     json_t * pdocument = json;
@@ -321,10 +355,13 @@ Document * document_parse(json_t *json){
         if(!object)
             return NULL;
 
-        json_t *file_id, *thumb, *file_name, *mime_type, *file_size;
+        json_t *file_id, *file_unique_id, *thumb, *file_name, *mime_type, file_size;
 
         file_id = json_object_get(pdocument,"file_id");
         object->file_id = alloc_string(json_string_value(file_id));
+
+        file_unique_id = json_object_get(pdocument,"file_unique_id");
+        object->file_unique_id = alloc_string(json_string_value(file_unique_id));
 
         thumb = json_object_get(pdocument,"thumb");
         object->thumb = photo_size_parse(thumb);
@@ -344,6 +381,20 @@ Document * document_parse(json_t *json){
     return NULL;
 }
 
+
+
+
+/*typedef struct _animation {
+    char *file_id;
+    char *file_unique_id;
+    int32_t width;
+    int32_t heigth;
+    int32_t duration;
+    PhotoSize *thumb;
+    char *file_name;
+    char *mime_type;
+    int32_t file_size;
+} Animation;*/
 Animation * animation_parse(json_t *json){
     Animation *object = NULL;
 
@@ -372,17 +423,8 @@ Animation * animation_parse(json_t *json){
         duration = json_object_get(json, "duration");
         object->duration = json_integer_value(duration);
 
-        thumb = json_object_get( json, "photo" );
-        length = json_array_size(thumb);
-        PhotoSize *_temp_p = NULL;
-        object->thumb = photo_size_parse(json_array_get(thumb, 0));
-        if (length > 0) {
-            for (i = 1; i < length; i++) {
-                _temp_p = photo_size_parse(json_array_get(thumb, i));
-                if (_temp_p)
-                    photo_size_add(object->thumb, _temp_p);
-            }
-        }
+        thumb = json_object_get(json, "thumb");
+        object->thumb = photo_size_parse(thumb);
 
         file_name = json_object_get(json, "file_name");
         object->file_name = alloc_string(json_string_value(file_name));
@@ -480,10 +522,14 @@ Video * video_parse(json_t *json){
         if(!object)
             return NULL;
 
-        json_t *file_id, *width, *height, *duration, *thumb, *mime_type, *file_size;
+        json_t *file_id, *file_unique_id, *width, *height, *duration, *thumb,
+                      *mime_type, *file_size;
 
         file_id = json_object_get(pvideo,"file_id");
         object->file_id = alloc_string(json_string_value(file_id));
+
+        file_unique_id = json_object_get(pvideo,"file_unique_id");
+        object->file_unique_id = alloc_string(json_string_value(file_unique_id));
 
         width = json_object_get(pvideo,"width");
         object->width = (int)json_integer_value(width);
@@ -518,10 +564,14 @@ Voice * voice_parse(json_t *json){
         if(!object)
             return NULL;
 
-        json_t *file_id, *duration, *mime_type, *file_size;
+        json_t *file_id, *file_unique_id, *duration, *mime_type, *file_size;
 
         file_id = json_object_get(pvoice,"file_id");
         object->file_id = alloc_string(json_string_value(file_id));
+
+        file_unique_id = json_object_get(pvoice,"file_unique_id");
+        object->file_unique_id = alloc_string(json_string_value(file_unique_id));
+
 
         duration = json_object_get(pvoice,"duration");
         object->duration = json_integer_value(duration);
@@ -547,7 +597,7 @@ Contact * contact_parse(json_t *json){
         if(!object)
             return NULL;
 
-        json_t *phone_number, *first_name, *last_name, *user_id;
+        json_t *phone_number, *first_name, *last_name, *user_id, *vcard;
 
         phone_number = json_object_get(pcontact,"phone_number");
         object->phone_number = alloc_string(json_string_value(phone_number));
@@ -560,6 +610,9 @@ Contact * contact_parse(json_t *json){
 
         user_id = json_object_get(pcontact,"user_id");
         object->user_id = json_integer_value(user_id);
+
+        vcard = json_object_get(pcontact,"vcard");
+        object->vcard = alloc_string(json_string_value(vcard));
 
         return object;
     }
@@ -599,7 +652,7 @@ Venue * venue_parse(json_t *json){
         if(!object)
             return NULL;
 
-        json_t *location, *title, *address, *foursquare_id;
+        json_t *location, *title, *address, *foursquare_id, *foursquare_type;
 
         location = json_object_get(pvenue,"location");
         object->location = location_parse(location);
@@ -612,6 +665,9 @@ Venue * venue_parse(json_t *json){
 
         foursquare_id = json_object_get(pvenue,"foursquare_id");
         object->foursquare_id = alloc_string(json_string_value(foursquare_id));
+
+        foursquare_type = json_object_get(pvenue,"foursquare_type");
+        object->foursquare_type = alloc_string(json_string_value(foursquare_type));        
 
         return object;
     }
@@ -1177,10 +1233,13 @@ VideoNote * video_note_parse(json_t * json){
         if(!object)
             return NULL;
 
-        json_t *file_id, *length, *duration, *thumb, *file_size;
+        json_t *file_id, *file_unique_id, *length, *duration, *thumb, *file_size;
 
         file_id = json_object_get(json, "file_id");
         object->file_id = alloc_string(json_string_value(file_id));
+
+        file_unique_id = json_object_get(json, "file_unique_id");
+        object->file_unique_id = alloc_string(json_string_value(file_unique_id));
 
         length = json_object_get(json, "length");
         object->length = json_integer_value(length);
@@ -1405,10 +1464,13 @@ File * file_parse(json_t * json){
         if(!object)
             return NULL;
 
-        json_t *file_id, *file_size, *file_path;
+        json_t *file_id, *file_unique_id, *file_size, *file_path;
 
         file_id = json_object_get(json, "file_id");
         object->file_id = alloc_string(json_string_value(file_id));
+
+        file_unique_id = json_object_get(json, "file_unique_id");
+        object->file_unique_id = alloc_string(json_string_value(file_unique_id));
 
         file_size = json_object_get(json, "file_size");
         object->file_size = json_integer_value(file_size);
@@ -1470,6 +1532,12 @@ UserProfilePhotos * user_profile_photos_parse(json_t * json){
 }
 
 
+/*typedef struct _chat_photo{
+    char *small_file_id;
+    char *small_file_unique_id;
+    char *big_file_id;
+    char *big_file_unique_id;
+} ChatPhoto;*/
 ChatPhoto * chat_photo_parse(json_t * json){
     ChatPhoto *object = NULL;
 
@@ -1478,13 +1546,19 @@ ChatPhoto * chat_photo_parse(json_t * json){
         if(!object)
             return NULL;
 
-        json_t *small_file_id, *big_file_id;
+        json_t *small_file_id, *small_file_unique_id, *big_file_id, *big_file_unique_id;
 
         small_file_id = json_object_get(json, "small_file_id");
         object->small_file_id = alloc_string(json_string_value(small_file_id));
 
+        small_file_unique_id = json_object_get(json, "small_file_unique_id");
+        object->small_file_unique_id = alloc_string(json_string_value(small_file_unique_id));
+
         big_file_id   = json_object_get(json, "big_file_id");
         object->big_file_id = alloc_string(json_string_value(big_file_id));
+
+        big_file_unique_id = json_object_get(json, "big_file_unique_id");
+        object->big_file_unique_id = alloc_string(json_string_value(big_file_unique_id));
 
         return object;
     }

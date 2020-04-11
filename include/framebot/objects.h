@@ -58,6 +58,7 @@ typedef struct _chat_photo{
 
 typedef struct _photo_size{
     char *file_id;
+    char *file_unique_id;
     int width;
     int height;
     int64_t file_size;
@@ -84,11 +85,11 @@ typedef struct _chat{
     char *username;
     char *first_name;
     char *last_name;
-    bool all_members_are_administrators:1;
     ChatPhoto *photo;
     char *description;
     char *invite_link;
     struct _message *pinned_message;
+    int32_t slow_mode_delay;
     char *sticker_set_name;
     bool can_set_sticker_set:1;
 } Chat;
@@ -188,6 +189,7 @@ typedef struct _sticker_set{
 
 typedef struct _video{
     char *file_id;
+    char *file_unique_id;
     int width;
     int height;
     int64_t duration;
@@ -231,6 +233,7 @@ typedef struct _venue{
     char *title;
     char *address;
     char *foursquare_id;
+    char *foursquare_type;
 } Venue;
 
 
@@ -524,6 +527,7 @@ typedef struct _chat_member {
 
 typedef struct _file{
     char *file_id;
+    char *file_unique_id;
     int64_t file_size;
     char *file_path;
 } File;
