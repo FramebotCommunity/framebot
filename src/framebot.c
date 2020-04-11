@@ -267,7 +267,7 @@ ChatMember *get_chat_member_chat (Bot *bot, int64_t chat_id, int64_t user_id) {
  * Changes the given chat or channel description
  * https://core.telegram.org/bots/api#setchatdescription
  */
-bool set_chat_description (Bot *bot, char *chat_id, char *description, bool disable_notification) {
+bool set_chat_description (Bot *bot, char *chat_id, char *description) {
     refjson *s_json;
     bool result;
 
@@ -286,13 +286,13 @@ bool set_chat_description (Bot *bot, char *chat_id, char *description, bool disa
 
 
 
-bool set_chat_description_chat (Bot *bot, int64_t chat_id, char *description, bool disable_notification) {
+bool set_chat_description_chat (Bot *bot, int64_t chat_id, char *description) {
     bool result;
     char * cchat_id;
 
     cchat_id = api_ltoa(chat_id);
 
-    result = set_chat_description (bot, cchat_id, description, disable_notification);
+    result = set_chat_description (bot, cchat_id, description);
 
     ffree(cchat_id);
 
@@ -2267,5 +2267,36 @@ BotCommand *getMyCommands(Bot *bot){
     close_json(s_json);
 
     return bot_command;
+}
+
+bool set_my_commands(Bot *bot, BotCommand *bot_command){
+
+    bool result;
+    json_t *json, *command_append;
+    BotCommand *next;
+    refjson *s_json = NULL;
+    char *str;
+
+    if(!bot_command)
+        return false;
+
+    json = json_pack("[{s:s,s:s}]", "command", bot_command->command, "description", bot_command->description);
+
+    next = bot_command->next;
+    while(next){
+        command_append = json_pack("{s:s,s:s}", "command", next->command, "description", next->description);
+        json_array_append(json, command_append);
+        next = next->next;
+    }
+
+    str = json_dumps(json, JSON_COMPACT);
+
+    s_json = generic_method_call(bot->token, API_setMyCommands, str);
+
+    result = json_is_true(s_json->content);
+
+    close_json(s_json);
+
+    return result;
 }
 

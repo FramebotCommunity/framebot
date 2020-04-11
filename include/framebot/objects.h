@@ -36,6 +36,9 @@ typedef struct _user{
     char *last_name;
     char *username;
     char *language_code;
+    bool can_join_groups;
+    bool can_read_all_group_messages;
+    bool supports_inline_queries;
 
     struct _user *next;
 } User;
@@ -96,6 +99,7 @@ typedef struct _message_entity{
     int64_t length;
     char *url;
     User *user;
+    char *language;
 
     struct _message_entity *next;
 } MessageEntity;
@@ -178,6 +182,7 @@ typedef struct _sticker_set{
     bool is_animated;
     bool contains_masks;
     Sticker * stickers;
+    PhotoSize * thumb;
 } StickerSet;
 
 

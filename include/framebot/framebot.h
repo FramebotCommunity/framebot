@@ -288,6 +288,9 @@
 
 #define API_getMyCommands "getMyCommands"
 
+#define API_setMyCommands "setMyCommands\
+?commands=%s"
+
 /* analyze parameter API methods */
 #define CONVERT_BOOLEAN_STR(p) (p > 0 ? "true" : "false")
 #define CONVERT_URL_STRING(p) (p == NULL ? "" : p)
@@ -525,8 +528,8 @@ int set_chat_title (Bot *bot, char *chat_id, char *title);
 int set_chat_title_chat (Bot *bot, int64_t chat_id, char *title);
 
 /* setChatDescription */
-bool set_chat_description (Bot *bot, char *chat_id, char *description, bool disable_notification);
-bool set_chat_description_chat (Bot *bot, int64_t chat_id, char *description, bool disable_notification);
+bool set_chat_description (Bot *bot, char *chat_id, char *description);
+bool set_chat_description_chat (Bot *bot, int64_t chat_id, char *description);
 
 /* pinChatMessage */
 bool pin_chat_message (Bot *bot, char * chat_id, int64_t message_id, bool disable_notification);
@@ -585,9 +588,6 @@ bool delete_message_chat(Bot *bot, int64_t chat_id, int64_t message_id);
 bool answer_inline_query( Bot *bot, char *inline_query_id, char *results, int64_t cache_time, bool is_personal,
     char *next_offset, char *switch_pm_text, char *switch_pm_parameter);
 
-void set_notification(bool disable_notification);
-bool get_notification();
-
 Message * send_media_group(Bot *bot, char * chat_id, char * media, char **filename, bool disable_notification, int64_t reply_to_message_id);
 Message * send_media_group_chat(Bot *bot, int64_t chat_id, char * media, char **filename, bool disable_notification, int64_t reply_to_message_id);
 
@@ -610,6 +610,7 @@ bool set_chat_permissions_chat(Bot *bot, int64_t chat_id, ChatPermissions *chat_
 bool answer_callback_query(Bot * bot, char *callback_query_id, char *text, bool show_alert, char * url, int32_t cache_time);
 
 BotCommand *getMyCommands(Bot *bot);
+bool set_my_commands(Bot *bot, BotCommand *bot_command);
 
 
 #endif
