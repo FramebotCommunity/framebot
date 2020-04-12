@@ -24,9 +24,6 @@
 #ifndef JSON_H
 #define JSON_H
 
-#include <framebot/framebot.h>
-
-
 #define i_U   0  /* InlineKeyboardButton field url */
 #define i_U_STR   "url"  /* InlineKeyboardButton field url */
 
