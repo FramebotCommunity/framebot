@@ -634,4 +634,8 @@ void bot_command_free(BotCommand *bot_command);
 bool bot_command_single_free(BotCommand *bot_command, char *command);
 void bot_command_add(BotCommand *dest, BotCommand *src);
 
+void dice_free(Dice *dice);
+
+void mask_position_free(MaskPosition *mask_position);
+
 #endif // OBJECTS_H_

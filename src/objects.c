@@ -75,13 +75,13 @@ Error *get_error(){
  ** } User;
  **/
 void user_add(User *origin, User *next){
-    User *o = origin;
+    User *tmp = origin;
 
-    while(o->next){
-        o = o->next;
+    while(tmp->next){
+        tmp = tmp->next;
     }
 
-    o->next = next;
+    tmp->next = next;
 }
 
 void user_free(User *usr){
@@ -118,8 +118,7 @@ void bot_free(Bot *bot){
     if(bot == NULL)
         return ;
 
-    if(bot->token)
-        ffree(bot->token);
+    ffree(bot->token);
 
     user_free(bot->user);
 
@@ -150,33 +149,25 @@ void chat_free(Chat *cht){
     if(cht == NULL)
         return ;
 
-    if(cht->type)
-        ffree(cht->type);
+    ffree(cht->type);
 
-    if(cht->title)
-        ffree(cht->title);
+    ffree(cht->title);
 
-    if(cht->username)
-        ffree(cht->username);
+    ffree(cht->username);
 
-    if(cht->first_name)
-        ffree(cht->first_name);
+    ffree(cht->first_name);
 
-    if(cht->last_name)
-        ffree(cht->last_name);
+    ffree(cht->last_name);
 
     chat_photo_free(cht->photo);
 
-    if(cht->description)
-        ffree(cht->description);
+    ffree(cht->description);
 
-    if(cht->invite_link)
-        ffree(cht->invite_link);
+    ffree(cht->invite_link);
 
     message_free(cht->pinned_message);
 
-    if(cht->sticker_set_name)
-        ffree(cht->sticker_set_name);
+    ffree(cht->sticker_set_name);
 
     ffree(cht);
 }
@@ -189,24 +180,24 @@ void message_entity_free(MessageEntity *msgett){
     if(msgett == NULL)
         return ;
 
-    if(msgett->type)
-        ffree(msgett->type);
+    ffree(msgett->type);
 
-    if(msgett->url)
-        ffree(msgett->url);
+    ffree(msgett->url);
 
     user_free(msgett->user);
+
+    ffree(msgett->language);
 
     ffree(msgett);
 }
 
-void message_entity_add(MessageEntity *dest, MessageEntity *src){
-    MessageEntity *tmp = dest;
+void message_entity_add(MessageEntity *src, MessageEntity *dest){
+    MessageEntity *tmp = src;
     
     while (tmp->next)
         tmp = tmp->next;
     
-    tmp->next = src;
+    tmp->next = dest;
 }
 
 size_t message_entity_len(MessageEntity *message_entity){
@@ -242,20 +233,17 @@ void audio_free(Audio *audio){
     if(audio == NULL)
         return ;
 
-    if(audio->file_id)
-        ffree(audio->file_id);
+    ffree(audio->file_id);
 
-    if(audio->performer)
-        ffree(audio->performer);
+    ffree(audio->file_unique_id);
 
-    if(audio->title)
-        ffree(audio->title);
+    ffree(audio->performer);
 
-    if(audio->mime_type)
-        ffree(audio->mime_type);
+    ffree(audio->title);
+
+    ffree(audio->mime_type);
 
     ffree(audio);
-    audio = NULL;
 }
 
 /**
@@ -263,14 +251,13 @@ void audio_free(Audio *audio){
  ** https://core.telegram.org/bots/api#photosize
  **/
 void photo_size_free(PhotoSize *photoSize){
-    if(photoSize != NULL){
-        if(photoSize->file_id)
-            ffree(photoSize->file_id);
 
-        ffree(photoSize);
-    }
+    ffree(photoSize->file_id);
 
-    photoSize = NULL;
+    ffree(photoSize->file_unique_id);
+
+    ffree(photoSize);
+
 }
 
 
@@ -314,29 +301,42 @@ size_t photo_size_len(PhotoSize *ophoto_size){
 void document_free(Document *document){
     if(document == NULL)
         return ;
+
     ffree(document->file_id);
+
+    ffree(document->file_unique_id);
+
     photo_size_free(document->thumb);
+
     ffree(document->file_name);
+
     ffree(document->mime_type);
+
     ffree(document);
-    document = NULL;
 }
 
 
 void animation_free(Animation *animation){
     if(animation == NULL)
         return ;
+
     ffree(animation->file_id);
+
+    ffree(animation->file_unique_id);
+
     ffree(animation->file_name);
+
     ffree(animation->mime_type);
+
     photo_size_free(animation->thumb);
+
     ffree(animation);
-    animation = NULL;
 }
 
 void game_free(Game *game){
     if(game == NULL)
         return ;
+
     ffree(game->title);
     ffree(game->description);
     photo_size_free(game->photo);
@@ -344,7 +344,6 @@ void game_free(Game *game){
     message_entity_free(game->text_entities);
     animation_free(game->animation);
     ffree(game);
-    game = NULL;
 }
 
 
@@ -352,14 +351,19 @@ void sticker_free(Sticker *_sticker){
     if(_sticker == NULL)
         return ;
 
-    if(_sticker->file_id)
-        ffree(_sticker->file_id);
+    ffree(_sticker->file_id);
 
-    if(_sticker->emoji)
-        ffree(_sticker->emoji);
+    ffree(_sticker->file_unique_id);
 
-    if(_sticker->thumb)
-        photo_size_free(_sticker->thumb);
+    ffree(_sticker->emoji);
+
+    photo_size_free(_sticker->thumb);
+
+    ffree(_sticker->emoji);
+
+    ffree(_sticker->set_name);
+
+    mask_position_free(_sticker->mask_position);
 
     ffree(_sticker);
 }
@@ -368,12 +372,15 @@ void sticker_free(Sticker *_sticker){
 void video_free(Video *_video){
     if(_video == NULL)
         return ;
-    if(_video->file_id)
-        ffree(_video->file_id);
-    if(_video->mime_type)
-        ffree(_video->mime_type);
-    if(_video->thumb)
-        ffree(_video->thumb);
+
+    ffree(_video->file_id);
+
+    ffree(_video->file_unique_id);
+
+    photo_size_free(_video->thumb);
+
+    ffree(_video->mime_type);
+
     ffree(_video);
 }
 
@@ -381,48 +388,52 @@ void video_free(Video *_video){
 void voice_free(Voice *_voice){
     if(_voice == NULL)
         return ;
-    if(_voice->file_id)
-        ffree(_voice->file_id);
-    if(_voice->mime_type)
-        ffree(_voice->mime_type);
+
+    ffree(_voice->file_id);
+
+    ffree(_voice->mime_type);
+
     ffree(_voice);
-    _voice = NULL;
 }
 
 void contact_free(Contact *_contact){
     if(_contact == NULL)
         return ;
-    if(_contact->phone_number)
-        ffree(_contact->phone_number);
-    if(_contact->first_name)
-        ffree(_contact->first_name);
-    if(_contact->last_name)
-        ffree(_contact->last_name);
+
+    ffree(_contact->phone_number);
+
+    ffree(_contact->first_name);
+
+    ffree(_contact->last_name);
+
+    ffree(_contact->vcard);
+
     ffree(_contact);
-    _contact = NULL;
 }
 
 void location_free(Location *_location){
     if(_location == NULL)
         return ;
+
     ffree(_location);
-    _location = NULL;
 }
 
 
 void venue_free(Venue *_venue){
     if(_venue == NULL)
         return ;
-    if(_venue->location)
-        location_free(_venue->location);
-    if(_venue->title)
-        ffree(_venue->title);
-    if(_venue->address)
-        ffree(_venue->address);
-    if(_venue->foursquare_id)
-        ffree(_venue->foursquare_id);
+
+    location_free(_venue->location);
+
+    ffree(_venue->title);
+
+    ffree(_venue->address);
+
+    ffree(_venue->foursquare_id);
+
+    ffree(_venue->foursquare_type);
+
     ffree(_venue);
-    _venue = NULL;
 }
 
 /**
@@ -794,14 +805,14 @@ void callback_query_free(CallbackQuery *callback_query){
 void video_note_free(VideoNote *video_note){
     if(video_note == NULL)
         return ;
-    if(video_note->file_id)
-        ffree(video_note->file_id);
 
-    if(video_note->thumb)
-        photo_size_free(video_note->thumb);
+    ffree(video_note->file_id);
+
+    ffree(video_note->file_unique_id);
+
+    photo_size_free(video_note->thumb);
 
     ffree(video_note);
-    video_note = NULL;
 }
 
 /**
@@ -1015,6 +1026,7 @@ void user_profile_photos_free(UserProfilePhotos *oupp){
 void chat_photo_free(ChatPhoto *ochat_photo){
     if(ochat_photo == NULL)
         return ;
+
     if(ochat_photo->small_file_id)
         ffree(ochat_photo->small_file_id);
 
@@ -1199,21 +1211,15 @@ void poll_free(Poll *poll){
     if(!poll)
         return;
 
-    if(poll->id){
-        ffree(poll->id);
-    }
-    if(poll->question){
-        ffree(poll->question);
-    }
-    if(poll->options){
-        poll_option_free(poll->options);
-    }
-    if(poll->type){
-        ffree(poll->type);
-    }
+    ffree(poll->id);
+
+    ffree(poll->question);
+
+    poll_option_free(poll->options);
+
+    ffree(poll->type);
 
     ffree(poll);
-    poll = NULL;
 }
 
 
@@ -1231,12 +1237,36 @@ void poll_option_free(PollOption *poll_option){
     if(!poll_option)
         return;
 
+    ffree(poll_option->text);
+
     if (poll_option->next){
         poll_option_free(poll_option->next);
     }
 
     ffree(poll_option);
 }
+
+void poll_answer_free(PollAnswer *poll_answer){
+
+    if(!poll_answer){
+        return ;
+    }
+
+    ffree(poll_answer->poll_id);
+
+    user_free(poll_answer->user);
+
+    ffree(poll_answer);
+}
+
+
+void dice_free(Dice *dice){
+    if(!dice)
+        return ;
+
+    ffree(dice);
+}
+
 
 void bot_command_free(BotCommand *bot_command){
 
@@ -1294,5 +1324,16 @@ void bot_command_add(BotCommand *dest, BotCommand *src){
         tmp = tmp->next;
 
     tmp->next = src;
+}
+
+void mask_position_free(MaskPosition *mask_position){
+
+    if(!mask_position){
+        return ;
+    }
+
+    ffree(mask_position->point);
+
+    ffree(mask_position);
 }
 

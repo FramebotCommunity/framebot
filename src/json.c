@@ -355,7 +355,7 @@ Document * document_parse(json_t *json){
         if(!object)
             return NULL;
 
-        json_t *file_id, *file_unique_id, *thumb, *file_name, *mime_type, file_size;
+        json_t *file_id, *file_unique_id, *thumb, *file_name, *mime_type, *file_size;
 
         file_id = json_object_get(pdocument,"file_id");
         object->file_id = alloc_string(json_string_value(file_id));
@@ -406,7 +406,6 @@ Animation * animation_parse(json_t *json){
 
         json_t *file_id, *file_unique_id, *width, *heigth, *duration, *thumb,
                     *file_name, *mime_type, *file_size;
-        size_t length, i;
 
         file_id = json_object_get(json, "file_id");
         object->file_id = alloc_string(json_string_value(file_id));
