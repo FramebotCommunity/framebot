@@ -22,14 +22,13 @@ int main (int argc, char **argv) {
     if(!inbot)
     	return -1;
 
-    Framebot *updates = get_updates(inbot, NULL, 0, 100, 0, "inline_query");
-    Update *queries = NULL;
+    Update *queries = get_updates(inbot, 0, 100, 0, "inline_query");
 
     int64_t last_update = 0;
 
     while (1) {
-        if (updates->up_inline_query) {
-            queries = updates->up_inline_query;
+
+        if (queries) {
 
             while (queries) {
                 if (answer_inline_query(inbot, queries->inline_query->id, result, 0, 0, NULL, NULL, NULL)) {
@@ -40,12 +39,13 @@ int main (int argc, char **argv) {
                 queries = queries->next;
             }
         }
-        get_updates(inbot, updates, last_update, 100, 0, NULL);
+
+        list_update_free(queries);
+        queries = get_updates(inbot, last_update, 100, 0, NULL);
     }
 
     bot_free(inbot);
     free(result);
-    framebot_free(updates);
 
     return 0;
 }

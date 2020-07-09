@@ -9,14 +9,14 @@ int main (int argc, char **argv) {
 
     int64_t last_offset = 0;
     Bot *echo;
-    Framebot *frame_update;
+    Update *update;
     Update *message, *temp;
 
     echo = framebot_init(argv[1]);
 
 
-    frame_update = get_updates(echo, NULL, last_offset, 100, 0, NULL);
-    message = frame_update->up_message;
+    update = get_updates(echo, last_offset, 100, 0, NULL);
+    message = get_type_updates(MESSAGE, &update);
     temp = message;
 
     while (temp) {
@@ -30,7 +30,7 @@ int main (int argc, char **argv) {
         temp = temp->next;
     }
 
-    get_updates(echo, frame_update, last_offset, 100, 0, NULL); // Reset update list
-    framebot_free(frame_update);
+    list_update_free(update);
+    list_update_free(message);
     return 0;
 }

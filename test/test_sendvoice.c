@@ -36,6 +36,7 @@ int _voice(){
             0, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
+		message_free(result);
 	}
 	else{
 		Error *error = get_error();
@@ -49,6 +50,7 @@ int _voice(){
             0, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
+		message_free(result);
 	}
 	else{
 		Error *error = get_error();
@@ -62,6 +64,7 @@ int _voice(){
             0, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
+		message_free(result);
 	}
 	else{
 		Error *error = get_error();
@@ -75,6 +78,7 @@ int _voice(){
             10, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
+		message_free(result);
 	}
 	else{
 		Error *error = get_error();
@@ -102,6 +106,7 @@ int _voice(){
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 		message_free(forward);
+		message_free(result);
 	}
 	else{
 		Error *error = get_error();
@@ -131,22 +136,26 @@ int main(int argc, char *argv[]){
 	filename = argv[3];
 	username = argv[2];
 
-	Framebot *update = NULL;
+	Update *update = NULL, *root_update = NULL;
 
-	update = get_updates(_bot, update, 0, 0, 0, "message");
+	root_update = get_updates(_bot, 0, 0, 0, "message");
+	update = root_update;
 
-	while(update->up_message){
-		if(strcmp(update->up_message->message->from->username, argv[2]) == 0){
+	while(update){
+		if(update->message && strcmp(update->message->from->username, argv[2]) == 0){
 			valid_username = 1;
-			chat_id = update->up_message->message->from->id;
+			chat_id = update->message->from->id;
 			_voice();
 			break;
 		}
+
+		update = update->next;
 	}
+
+	list_update_free(root_update);
 
 	if(valid_username == 0)
 		printf("Username not found");
-
 
 	return 0;
 }

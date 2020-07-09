@@ -16,19 +16,21 @@ int valid_username = 0;
 
 bool accpte_payment(){
 
-	Framebot *framebot = NULL;
+	Update *root_update = NULL, *update_shipping = NULL, *update_checkout = NULL;
 
 /*	char *tax = "{\"id\":\"product_12\", \"title\":\"Product_12\", \"prices\":[{\"label\":\"tax\", \"amount\":515}]}";
 	char *notax = "";*/
 
 	while(1){
-		if(framebot == NULL)
-			framebot = get_updates(_bot, framebot, 0, 0, 0, NULL);
-		else
-			framebot = get_updates(_bot, framebot, framebot->update_id + 1, 0, 0, NULL);
+		root_update = get_updates(_bot, 0, 0, 0, NULL);
 
-		while(framebot->up_shipping_query != NULL){
-			Update *s_q = framebot->up_shipping_query;
+		update_checkout = get_type_updates(PRE_CHECKOUT_QUERY, &root_update);
+		update_shipping = get_type_updates(SHIPPING_QUERY, &root_update);
+
+		list_update_free(root_update);
+
+		Update *s_q = update_shipping;
+		while(s_q){
 
 			if(strcmp(s_q->shipping_query->invoice_payload, "product_12") == 0 ||
 				strcmp(s_q->shipping_query->invoice_payload, "product_11") == 0){
@@ -43,12 +45,14 @@ bool accpte_payment(){
 			if(error)
 				printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 
-			framebot->up_shipping_query = framebot->up_shipping_query->next;
-			update_free(s_q);
+			
+			s_q = s_q->next;
 
 		}
-		while(framebot->up_pre_checkout_query != NULL){
-			Update *p_c_q = framebot->up_pre_checkout_query;
+		list_update_free(update_shipping);
+
+		Update *p_c_q = update_checkout;
+		while(p_c_q){
 			
 			answerPreCheckoutQuery(_bot, p_c_q->pre_checkout_query->id, 1, NULL);
 
@@ -56,9 +60,10 @@ bool accpte_payment(){
 			if(error)
 				printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
 
-			framebot->up_pre_checkout_query = framebot->up_pre_checkout_query->next;
-			update_free(p_c_q);
+			p_c_q = p_c_q->next;
 		}
+
+		list_update_free(update_checkout);
 	}
 }
 
@@ -283,24 +288,22 @@ int main(int argc, char *argv[]){
 
 	username = argv[3];
 
-	Framebot *update = NULL;
-	Update *message = NULL;
+	Update *update = NULL, *root_update = NULL;
 
-	update = get_updates(_bot, update, 0, 0, 0, "message");
-	message = update->up_message;
+	root_update = get_updates(_bot, 0, 0, 0, "message");
+	update = root_update;
 
-
-	while(message){
-		if(strcmp(update->up_message->message->from->username, argv[3]) == 0){
+	while(update){
+		if(strcmp(update->message->from->username, argv[3]) == 0){
 			valid_username = 1;
-			chat_id = update->up_message->message->from->id;
+			chat_id = update->message->from->id;
 			test_invoice();
 			accpte_payment();
 			break;
 		}
 
-		printf("\nuser found: %s\n", update->up_message->message->from->username);
-		message = message->next;
+		printf("\nuser found: %s\n", update->message->from->username);
+		update = update;
 
 	}
 

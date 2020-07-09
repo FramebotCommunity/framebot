@@ -240,10 +240,10 @@ Message *send_invoice(Bot *bot, int64_t chat_id, char * title, char *description
 
     s_json = generic_method_call(bot->token, API_sendInvoice,
         chat_id, title, description, payload, s_invoice.ptoken, start_parameter, currency[s_invoice.currency_code], prices,
-        CONVERT_URL_STRING(provider_data), CONVERT_URL_STRING(s_invoice.img.photo_url), s_invoice.img.photo_size, s_invoice.img.photo_width,
+        CONVERT_NULL_STRING(provider_data), CONVERT_NULL_STRING(s_invoice.img.photo_url), s_invoice.img.photo_size, s_invoice.img.photo_width,
         s_invoice.img.photo_heigth, s_invoice.option.n_name, s_invoice.option.n_phone, s_invoice.option.n_email, s_invoice.option.n_shipping_address,
         s_invoice.option.s_phone_to_provider, s_invoice.option.s_email_to_provider, s_invoice.option.is_flexible,
-        CONVERT_BOOLEAN_STR(disable_notification), reply_to_message_id, CONVERT_URL_STRING(reply_markup));
+        CONVERT_BOOLEAN_STR(disable_notification), reply_to_message_id, CONVERT_NULL_STRING(reply_markup));
 
     if(!s_json)
         return NULL;
@@ -265,8 +265,8 @@ bool answerShippingQuery(Bot *bot, char *shipping_query_id, bool ok, char *shipp
     refjson *s_json;
 
     s_json = generic_method_call(bot->token, API_answerShippingQuery,
-        shipping_query_id, CONVERT_BOOLEAN_STR(ok), CONVERT_URL_STRING(shipping_options),
-        CONVERT_URL_STRING(error_message));
+        shipping_query_id, CONVERT_BOOLEAN_STR(ok), CONVERT_NULL_STRING(shipping_options),
+        CONVERT_NULL_STRING(error_message));
 
     if(!s_json)
         return -1;
@@ -289,7 +289,7 @@ bool answerPreCheckoutQuery(Bot *bot, char *pre_checkout_query_id, bool ok, char
     refjson *s_json;
 
     s_json = generic_method_call(bot->token, API_answerPreCheckoutQuery,
-        pre_checkout_query_id, CONVERT_BOOLEAN_STR(ok), CONVERT_URL_STRING(error_message));
+        pre_checkout_query_id, CONVERT_BOOLEAN_STR(ok), CONVERT_NULL_STRING(error_message));
 
     if(!s_json)
         return -1;

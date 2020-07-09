@@ -20,20 +20,33 @@
 #define WHITE "\033[01;37m"
 
 
+#ifdef _WIN32
+    #include <Windows.h>
+    #define custom_sleep(mili) Sleep(mili)
+#else
+    #include <unistd.h>
+    #define custom_sleep(mili) sleep(mili)
+#endif
+
+
 Bot * _bot = NULL;
 char *username = NULL;
 int64_t chat_id = 0;
 int valid_username = 0;
 char *filename = NULL;
+char filename_id[100];
+char *user_group = NULL;
 Message *result = NULL;
+Message *first = NULL;
 
 int _photo(){
 	printf(WHITE "Send audio ... \n");
 
 	printf(WHITE "Send chat_id ......... " COLOR_RESET);
 	fflush(stdout);
-	result = send_photo_chat(_bot, chat_id, filename, NULL, HTML, ON, 0, NULL);
-	if(result){
+	first = send_photo_chat(_bot, chat_id, filename, NULL, RAW, OFF, 0, NULL);
+	if(first){
+		strcpy(filename_id, first->photo->file_id);
 		printf(BLUE "OK\n" COLOR_RESET);
 	}
 	else{
@@ -44,9 +57,10 @@ int _photo(){
 
 	printf(WHITE "Send username ......... " COLOR_RESET);
 	fflush(stdout);
-	result = send_photo_chat(_bot, chat_id, filename, NULL, HTML, ON, 0, NULL);
+	result = send_photo(_bot, user_group, filename_id, NULL, RAW, OFF, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
+		message_free(result);
 	}
 	else{
 		Error *error = get_error();
@@ -56,9 +70,10 @@ int _photo(){
 
 	printf(WHITE "Send caption ......... " COLOR_RESET);
 	fflush(stdout);
-	result = send_photo_chat(_bot, chat_id, filename, "caption", HTML, ON, 0, NULL);
+	result = send_photo_chat(_bot, chat_id, filename_id, "caption", RAW, OFF, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
+		message_free(result);
 	}
 	else{
 		Error *error = get_error();
@@ -66,9 +81,23 @@ int _photo(){
 		exit(-1);
 	}
 
+	printf(WHITE "Send parse_mode ......... " COLOR_RESET);
+	fflush(stdout);
+	result = send_photo_chat(_bot, chat_id, filename_id, "parameter parse_mode = MODE_MARKDOWN%0Abold = *bold text*%0Aitalic = _italic text_%0A[inline URL](https://github.com/giancarlopro/framebot)%0A```block_languagepre-formatted fixed-width code block```", MARKDOWN, OFF, 0, NULL);
+	if(result){
+		printf(BLUE "OK\n" COLOR_RESET);
+		message_free(result);
+	}
+	else{
+		Error *error = get_error();
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		exit(-1);
+	}
+
+
 	printf(WHITE "Send disable_notification ......... " COLOR_RESET);
 	fflush(stdout);
-	result = send_photo_chat(_bot, chat_id, filename, "disable_notification", HTML, ON, 0, NULL);
+	result = send_photo_chat(_bot, chat_id, filename_id, "disable_notification", RAW, ON, 0, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 	}
@@ -80,10 +109,12 @@ int _photo(){
 
 	printf(WHITE "Send reply_to_message_id ......... " COLOR_RESET);
 	fflush(stdout);
-	Message * forward = send_photo_chat(_bot, chat_id, filename, "reply_to_message_id", HTML, ON, result->message_id, NULL);
+	Message * forward = send_photo_chat(_bot, chat_id, filename_id, "reply_to_message_id", RAW, ON, result->message_id, NULL);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 		message_free(forward);
+		message_free(result);
+		message_free(first);
 	}
 	else{
 		Error *error = get_error();
@@ -97,7 +128,7 @@ int _photo(){
 int main(int argc, char *argv[]){
 
 	if(argc < 4){
-		fprintf(stderr, "sendphoto <token> <username> <path audio>");
+		fprintf(stderr, "sendphoto <token> <username> @<user_group> <path photo>");
 		exit(-1);
 	}
 
@@ -107,25 +138,27 @@ int main(int argc, char *argv[]){
 		exit(-1);
 	}
 
-	filename = argv[3];
-	username = argv[2];
+	username   = argv[2];
+	user_group = argv[3];
+	filename   = argv[4];
 
-	Framebot *update = NULL;
-	Update *_update;
+	Update *update = NULL, *root_update = NULL;
 
-	update = get_updates(_bot, update, 0, 0, 0, "message");
-	_update = update->up_message;
+	root_update = get_updates(_bot, 0, 0, 0, "message");
+	update = root_update;
 
-	while(_update){
-		if(strcmp(_update->message->from->username, argv[2]) == 0){
+	while(update){
+		if(strcmp(update->message->from->username, argv[2]) == 0){
 			valid_username = 1;
-			chat_id = _update->message->from->id;
+			chat_id = update->message->from->id;
 			_photo();
 			break;
 		}
 
-		_update = _update->next;
+		update = update->next;
 	}
+
+	list_update_free(root_update);
 
 	if(valid_username == 0)
 		printf("Username not found");

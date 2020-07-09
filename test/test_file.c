@@ -60,45 +60,46 @@ int main(int argc, char *argv[]){
 
 	username = argv[2];
 
-	Framebot *_update = NULL;
+	Update *update = NULL, *root_update = NULL;
 
-	_update = get_updates(_bot, _update, 0, 0, 100, NULL);
-	Update *update = _update->up_message;
+	root_update = get_updates(_bot, 0, 0, 100, NULL);
+	update = root_update;
 	File *ofile = NULL;
 	int id = 0;
 
 	while(update){
-		if(update->message->audio){
-			ofile = get_file(_bot, update->message->audio->file_id);
-			printf("%d.\nuser:%s\ndate:%ld\nfile_path:%s\n\n", id++, update->message->from->username, update->message->date, ofile->file_path);
-			file_download(_bot, ofile, namefile);
+		if(update->message){
+			if(update->message->audio){
+				ofile = get_file(_bot, update->message->audio->file_id);
+				printf("%d.\nuser:%s\ndate:%ld\nfile_path:%s\n\n", id++, update->message->from->username, update->message->date, ofile->file_path);
+				file_download(_bot, ofile, namefile);
+			}
+			else if(update->message->document){
+				ofile = get_file(_bot, update->message->document->file_id);
+				printf("%d.\nuser:%s\ndate:%ld\nfile_path:%s\n\n", id++, update->message->from->username, update->message->date, ofile->file_path);
+				file_download(_bot, ofile, namefile);
+			}
+			else if(update->message->photo){
+				ofile = get_file(_bot, update->message->photo->file_id);
+				printf("%d.\nuser:%s\ndate:%ld\nfile_path:%s\n\n", id++, update->message->from->username, update->message->date, ofile->file_path);
+				file_download(_bot, ofile, namefile);
+			}
+			else if(update->message->video){
+				ofile = get_file(_bot, update->message->video->file_id);
+				printf("%d.\nuser:%s\ndate:%ld\nfile_path:%s\n\n", id++, update->message->from->username, update->message->date, ofile->file_path);
+				file_download(_bot, ofile, namefile);
+			}
+			else if(update->message->voice){
+				ofile = get_file(_bot, update->message->voice->file_id);
+				printf("%d.\nuser:%s\ndate:%ld\nfile_path:%s\n\n", id++, update->message->from->username, update->message->date, ofile->file_path);
+				file_download(_bot, ofile, namefile);
+			}
+			else if(update->message->video_note){
+				ofile = get_file(_bot, update->message->voice->file_id);
+				printf("%d.\nuser:%s\ndate:%ld\nfile_path:%s\n\n", id++, update->message->from->username, update->message->date, ofile->file_path);
+				file_download(_bot, ofile, namefile);
+			}
 		}
-		else if(update->message->document){
-			ofile = get_file(_bot, update->message->document->file_id);
-			printf("%d.\nuser:%s\ndate:%ld\nfile_path:%s\n\n", id++, update->message->from->username, update->message->date, ofile->file_path);
-			file_download(_bot, ofile, namefile);
-		}
-		else if(update->message->photo){
-			ofile = get_file(_bot, update->message->photo->file_id);
-			printf("%d.\nuser:%s\ndate:%ld\nfile_path:%s\n\n", id++, update->message->from->username, update->message->date, ofile->file_path);
-			file_download(_bot, ofile, namefile);
-		}
-		else if(update->message->video){
-			ofile = get_file(_bot, update->message->video->file_id);
-			printf("%d.\nuser:%s\ndate:%ld\nfile_path:%s\n\n", id++, update->message->from->username, update->message->date, ofile->file_path);
-			file_download(_bot, ofile, namefile);
-		}
-		else if(update->message->voice){
-			ofile = get_file(_bot, update->message->voice->file_id);
-			printf("%d.\nuser:%s\ndate:%ld\nfile_path:%s\n\n", id++, update->message->from->username, update->message->date, ofile->file_path);
-			file_download(_bot, ofile, namefile);
-		}
-		else if(update->message->video_note){
-			ofile = get_file(_bot, update->message->voice->file_id);
-			printf("%d.\nuser:%s\ndate:%ld\nfile_path:%s\n\n", id++, update->message->from->username, update->message->date, ofile->file_path);
-			file_download(_bot, ofile, namefile);
-		}
-
 
 		update = update->next;
 	}

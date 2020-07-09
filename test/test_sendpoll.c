@@ -23,18 +23,190 @@ Bot * _bot = NULL;
 char *username = NULL;
 int64_t chat_id = 0;
 int valid_username = 0;
-char *text = NULL;
+char *user_group = NULL;
 Message *result = NULL;
-char * options = "[\"option\", \"option2\"]";
+Message *result1 = NULL;
+char *title = "title poll";
+char * options = "[\"1 option\", \"2 option\", \"3 option\"]";
+
+/*
+send_poll(
+Bot *bot
+char *chat_id
+char *question
+char *options
+bool is_anonymous,
+char *type
+bool allows_multiple_answers
+int32_t correct_option_id
+bool is_closed,
+bool disable_notification
+int32_t reply_to_message_id
+char *reply_markup
+)*/
 
 int _poll(){
 	printf(WHITE "Send sendPoll ... \n");
 
 	printf(WHITE "Send chat_id ........." COLOR_RESET);
 	fflush(stdout);
-	result = send_poll_chat(_bot, chat_id, "parameter chat_id", options, false, NULL, 0, 0, 0, 0, 0, NULL);
+	result = send_poll_chat(_bot/*bot*/, chat_id/*chat_id*/, "chat_id"/*question*/,
+				options/*options*/, OFF/*is_anonymous*/, NULL/*type*/, OFF/*allows_multiple_answers*/,
+				0/*correct_option_id*/, OFF/*is_closed*/, OFF/*disable_notification*/, 0/*reply_to_message_id*/,
+				NULL/*char *reply_markup*/);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
+		message_free(result);
+	}
+	else{
+		Error *error = get_error();
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		exit(-1);
+	}
+
+
+	printf(WHITE "Send username ........." COLOR_RESET);
+	fflush(stdout);
+	result = send_poll(_bot/*bot*/, user_group/*chat_id*/, "username"/*question*/,
+				options/*options*/, OFF/*is_anonymous*/, NULL/*type*/, OFF/*allows_multiple_answers*/,
+				0/*correct_option_id*/, OFF/*is_closed*/, OFF/*disable_notification*/, 0/*reply_to_message_id*/,
+				NULL/*char *reply_markup*/);
+	if(result){
+		printf(BLUE "OK\n" COLOR_RESET);
+		message_free(result);
+	}
+	else{
+		Error *error = get_error();
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		exit(-1);
+	}
+
+
+	printf(WHITE "Send is_anonymous ........." COLOR_RESET);
+	fflush(stdout);
+	result = send_poll_chat(_bot/*bot*/, chat_id/*chat_id*/, "is_anonymous"/*question*/,
+				options/*options*/, ON/*is_anonymous*/, NULL/*type*/, OFF/*allows_multiple_answers*/,
+				0/*correct_option_id*/, OFF/*is_closed*/, OFF/*disable_notification*/, 0/*reply_to_message_id*/,
+				NULL/*char *reply_markup*/);
+	if(result){
+		printf(BLUE "OK\n" COLOR_RESET);
+		message_free(result);
+	}
+	else{
+		Error *error = get_error();
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		exit(-1);
+	}
+
+
+	printf(WHITE "Send type quiz ........." COLOR_RESET);
+	fflush(stdout);
+	result = send_poll_chat(_bot/*bot*/, chat_id/*chat_id*/, "type quiz"/*question*/,
+				options/*options*/, OFF/*is_anonymous*/, "quiz"/*type*/, OFF/*allows_multiple_answers*/,
+				0/*correct_option_id*/, OFF/*is_closed*/, OFF/*disable_notification*/, 0/*reply_to_message_id*/,
+				NULL/*char *reply_markup*/);
+	if(result){
+		printf(BLUE "OK\n" COLOR_RESET);
+		message_free(result);
+	}
+	else{
+		Error *error = get_error();
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		exit(-1);
+	}
+
+
+	printf(WHITE "Send type regular ........." COLOR_RESET);
+	fflush(stdout);
+	result = send_poll_chat(_bot/*bot*/, chat_id/*chat_id*/, "type regular"/*question*/,
+				options/*options*/, OFF/*is_anonymous*/, "regular"/*type*/, OFF/*allows_multiple_answers*/,
+				0/*correct_option_id*/, OFF/*is_closed*/, OFF/*disable_notification*/, 0/*reply_to_message_id*/,
+				NULL/*char *reply_markup*/);
+	if(result){
+		printf(BLUE "OK\n" COLOR_RESET);
+		message_free(result);
+	}
+	else{
+		Error *error = get_error();
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		exit(-1);
+	}
+
+
+	printf(WHITE "Send allows_multiple_answers ........." COLOR_RESET);
+	fflush(stdout);
+	result = send_poll_chat(_bot/*bot*/, chat_id/*chat_id*/, "allows_multiple_answers"/*question*/,
+				options/*options*/, OFF/*is_anonymous*/, NULL/*type*/, ON/*allows_multiple_answers*/,
+				0/*correct_option_id*/, OFF/*is_closed*/, OFF/*disable_notification*/, 0/*reply_to_message_id*/,
+				NULL/*char *reply_markup*/);
+	if(result){
+		printf(BLUE "OK\n" COLOR_RESET);
+		message_free(result);
+	}
+	else{
+		Error *error = get_error();
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		exit(-1);
+	}
+
+
+	printf(WHITE "Send correct_option_id ........." COLOR_RESET);
+	fflush(stdout);
+	result = send_poll_chat(_bot/*bot*/, chat_id/*chat_id*/, "correct_option_id"/*question*/,
+				options/*options*/, OFF/*is_anonymous*/, "quiz"/*type*/, OFF/*allows_multiple_answers*/,
+				2/*correct_option_id*/, OFF/*is_closed*/, OFF/*disable_notification*/, 0/*reply_to_message_id*/,
+				NULL/*char *reply_markup*/);
+	if(result){
+		printf(BLUE "OK\n" COLOR_RESET);
+		message_free(result);
+	}
+	else{
+		Error *error = get_error();
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		exit(-1);
+	}
+
+	printf(WHITE "Send is_closed ........." COLOR_RESET);
+	fflush(stdout);
+	result = send_poll_chat(_bot/*bot*/, chat_id/*chat_id*/, "is_closed"/*question*/,
+				options/*options*/, OFF/*is_anonymous*/, NULL/*type*/, OFF/*allows_multiple_answers*/,
+				0/*correct_option_id*/, ON/*is_closed*/, OFF/*disable_notification*/, 0/*reply_to_message_id*/,
+				NULL/*char *reply_markup*/);
+	if(result){
+		printf(BLUE "OK\n" COLOR_RESET);
+		message_free(result);
+	}
+	else{
+		Error *error = get_error();
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		exit(-1);
+	}
+
+	printf(WHITE "Send disable_notification ........." COLOR_RESET);
+	fflush(stdout);
+	result = send_poll_chat(_bot/*bot*/, chat_id/*chat_id*/, "disable_notification"/*question*/,
+				options/*options*/, OFF/*is_anonymous*/, NULL/*type*/, OFF/*allows_multiple_answers*/,
+				0/*correct_option_id*/, OFF/*is_closed*/, ON/*disable_notification*/, 0/*reply_to_message_id*/,
+				NULL/*char *reply_markup*/);
+	if(result){
+		printf(BLUE "OK\n" COLOR_RESET);
+	}
+	else{
+		Error *error = get_error();
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		exit(-1);
+	}
+
+	printf(WHITE "Send reply_to_message_id ........." COLOR_RESET);
+	fflush(stdout);
+	result1 = send_poll_chat(_bot/*bot*/, chat_id/*chat_id*/, "reply_to_message_id"/*question*/,
+				options/*options*/, OFF/*is_anonymous*/, NULL/*type*/, OFF/*allows_multiple_answers*/,
+				0/*correct_option_id*/, OFF/*is_closed*/, OFF/*disable_notification*/, result->message_id/*reply_to_message_id*/,
+				NULL/*char *reply_markup*/);
+	if(result1){
+		printf(BLUE "OK\n" COLOR_RESET);
+		message_free(result);
+		message_free(result1);
 	}
 	else{
 		Error *error = get_error();
@@ -47,8 +219,8 @@ int _poll(){
 
 int main(int argc, char *argv[]){
 
-	if(argc < 4){
-		fprintf(stderr, "sendphoto <token> <username>");
+	if(argc < 3){
+		fprintf(stderr, "sendphoto <token> <username> @<user_group>");
 		exit(-1);
 	}
 
@@ -58,26 +230,28 @@ int main(int argc, char *argv[]){
 		exit(-1);
 	}
 
-	username = argv[2];
+	username   = argv[2];
+	user_group = argv[3];
 
-	Framebot *update = NULL;
-	Update *message = NULL;
+	Update *update = NULL, *root_update = NULL;
 
-	update = get_updates(_bot, update, 0, 0, 0, "message");
-	message = update->up_message;
+	root_update = get_updates(_bot, 0, 0, 0, "message");
+	update = root_update;
 
-	while(message){
-		if(strcmp(update->up_message->message->from->username, argv[2]) == 0){
+	while(update){
+		if(update->message && strcmp(update->message->from->username, argv[2]) == 0){
 			valid_username = 1;
-			chat_id = update->up_message->message->from->id;
+			chat_id = update->message->from->id;
 			_poll();
 			break;
 		}
 
-		printf("\nuser found: %s\n", update->up_message->message->from->username);
-		message = message->next;
+		update = update->next;
 
 	}
+
+	list_update_free(root_update);
+	bot_free(_bot);
 
 	if(valid_username == 0)
 		printf("\nUsername %s not found", argv[2]);

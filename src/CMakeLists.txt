@@ -16,6 +16,7 @@ if(UNIX)
 		message(SEND_ERROR "Only Linux, FreeBSD and Windows are supported at this time.")
 	endif()
 
+
 	if(DEBUG EQUAL 1)
 		message(STATUS "DEBUG active")
 		add_definitions("-g")
@@ -29,6 +30,7 @@ if(UNIX)
 		SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg")
 		SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -pg")
 	endif()
+
 
 	add_library(framebot_ SHARED framebot.c memory.c objects.c json.c network.c format.c util.c payments.c)
 	target_link_libraries(framebot_ ${JANSSON_LIB} ${curl})

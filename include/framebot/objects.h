@@ -294,6 +294,7 @@ typedef struct _encrypted_passaport_element {
     PassportFile *selfie;
     PassportFile *translation;
     char *hash;
+    struct _encrypted_passaport_element *next;
 } EncryptedPassportElement;
 
 
@@ -382,12 +383,12 @@ typedef struct _inline_keyboard_button {
     char * switch_inline_query_current_chat;
     CallbackGame * callback;
     bool pay;
-    struct _inline_keyboard_markup * next;
+    struct _inline_keyboard_button * next;
 }InlineKeyboardButton;
 
 
 typedef struct _inline_keyboard_markup {
-    InlineKeyboardButton * inline_keyboard;
+    InlineKeyboardButton ** inline_keyboard;
 } InlineKeyboardMarkup;
 
 
@@ -486,20 +487,6 @@ typedef struct _update{
 	struct _update *next;
 } Update;
 
-typedef struct {
-    int64_t update_id;
-    Update *up_message;
-    Update *up_edited_message;
-    Update *up_channel_post;
-    Update *up_edited_channel_post;
-    Update *up_inline_query;
-    Update *up_chosen_inline_result;
-    Update *up_callback_query;
-    Update *up_shipping_query;
-    Update *up_pre_checkout_query;
-    Update * poll;
-    Update * poll_answer;
-} Framebot;
 
 typedef struct _chat_member {
     User *user;
@@ -624,11 +611,10 @@ void error(int64_t error_code, const char *description);
 void error_free();
 Error *get_error();
 
-void framebot_add( Framebot *framebot, Update *update );
-void framebot_free(Framebot *framebot);
-
+void poll_free(Poll *poll);
 void poll_option_free(PollOption *poll_option);
 void poll_option_add(PollOption *dest, PollOption *src);
+void poll_answer_free(PollAnswer *poll_answer);
 
 void bot_command_free(BotCommand *bot_command);
 bool bot_command_single_free(BotCommand *bot_command, char *command);
@@ -637,5 +623,16 @@ void bot_command_add(BotCommand *dest, BotCommand *src);
 void dice_free(Dice *dice);
 
 void mask_position_free(MaskPosition *mask_position);
+
+void get_type_update(Update *update, Update *n_update);
+
+void list_update_free(Update *update);
+
+void chat_permissions_free(ChatPermissions *chat_permissions);
+
+void sticker_set_free(StickerSet *sticker_set);
+
+void callback_game_free(CallbackGame *callbackgame);
+
 
 #endif // OBJECTS_H_

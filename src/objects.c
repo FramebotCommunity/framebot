@@ -243,6 +243,8 @@ void audio_free(Audio *audio){
 
     ffree(audio->mime_type);
 
+    photo_size_free(audio->thumb);
+
     ffree(audio);
 }
 
@@ -251,6 +253,10 @@ void audio_free(Audio *audio){
  ** https://core.telegram.org/bots/api#photosize
  **/
 void photo_size_free(PhotoSize *photoSize){
+
+    if(!photoSize){
+        return;
+    }
 
     ffree(photoSize->file_id);
 
@@ -339,9 +345,24 @@ void game_free(Game *game){
 
     ffree(game->title);
     ffree(game->description);
-    photo_size_free(game->photo);
+    
+    
+    PhotoSize *pnext = NULL;
+    while(game->photo){
+        pnext = game->photo->next;
+        photo_size_free(game->photo);
+        game->photo = pnext;
+    }
+
     ffree(game->text);
-    message_entity_free(game->text_entities);
+
+    MessageEntity *mnext = NULL;
+    while(game->text_entities){
+        mnext = game->text_entities->next;
+        message_entity_free(game->text_entities);
+        game->text_entities = mnext;
+    }
+
     animation_free(game->animation);
     ffree(game);
 }
@@ -358,8 +379,6 @@ void sticker_free(Sticker *_sticker){
     ffree(_sticker->emoji);
 
     photo_size_free(_sticker->thumb);
-
-    ffree(_sticker->emoji);
 
     ffree(_sticker->set_name);
 
@@ -390,6 +409,8 @@ void voice_free(Voice *_voice){
         return ;
 
     ffree(_voice->file_id);
+
+    ffree(_voice->file_unique_id);
 
     ffree(_voice->mime_type);
 
@@ -458,8 +479,15 @@ void message_free(Message *message){
     if(message->forward_from_chat)
         chat_free(message->forward_from_chat);
 
+    if(message->forward_signature)
+        ffree(message->forward_signature);
+
+    if(message->forward_sender_name)
+        ffree(message->forward_sender_name);
+
     if(message->reply_to_message)
         message_free(message->reply_to_message);
+
 
     if(message->entities){
         MessageEntity *m_next = message->entities, *m = m_next;
@@ -484,6 +512,9 @@ void message_free(Message *message){
 
     if(message->document)
         document_free(message->document);
+
+    if(message->animation)
+        animation_free(message->animation);    
 
     if(message->game)
         game_free(message->game);
@@ -515,6 +546,12 @@ void message_free(Message *message){
     if(message->venue)
         venue_free(message->venue);
 
+    if(message->poll)
+        poll_free(message->poll);
+
+    if(message->dice)
+        dice_free(message->dice);
+   
     if(message->new_chat_members){
         User *u_next = message->new_chat_members, *u = u_next;
         while(u){
@@ -548,6 +585,9 @@ void message_free(Message *message){
     if(message->successful_payment)
         successful_payment_free(message->successful_payment);
 
+    if(message->connected_website)
+        ffree(message->connected_website);
+
     if(message->text)
         ffree(message->text);
 
@@ -557,8 +597,7 @@ void message_free(Message *message){
     if(message->new_chat_title)
         ffree(message->new_chat_title);
 
-    if(message->forward_signature)
-        ffree(message->forward_signature);
+
 
     if(message->author_signature)
         ffree(message->author_signature);
@@ -566,13 +605,15 @@ void message_free(Message *message){
     if(message->media_group_id)
         ffree(message->media_group_id);
 
+//    if(message->passport_data)
+//        passaport (message->passport_data_free);
+
     if(message->next != NULL){
         next = message->next;
         message_free(next);
     }
 
     ffree(message);
-    message = NULL;
 }
 
 
@@ -585,10 +626,25 @@ void message_add(Message *dest, Message *src){
     tmp->next = src;
 }
 
+void list_update_free(Update *update){
+
+    Update *next = NULL;
+
+    while(update){
+        next = update->next;
+
+        update_free(update);
+
+        update = next;
+
+    }
+
+}
 
 void update_free(Update *oupdate){
-    if(oupdate == NULL)
+    if(!oupdate)
         return ;
+
     if(oupdate->message)
         message_free(oupdate->message);
 
@@ -616,6 +672,11 @@ void update_free(Update *oupdate){
     if(oupdate->pre_checkout_query)
         pre_checkout_query_free(oupdate->pre_checkout_query);
 
+    if(oupdate->poll)
+        poll_free(oupdate->poll);
+
+    if(oupdate->poll_answer)
+        poll_answer_free(oupdate->poll_answer);
 
 
     ffree(oupdate);
@@ -661,11 +722,15 @@ size_t update_len(Update *u) {
 void chat_member_free(ChatMember *chatMember) {
     if(chatMember == NULL)
         return ;
+
     if(chatMember->user)
         user_free(chatMember->user);
 
     if(chatMember->status)
         ffree(chatMember->status);
+
+    if(chatMember->custom_title)
+        ffree(chatMember->custom_title);
 
     ffree(chatMember);
     chatMember = NULL;
@@ -718,12 +783,10 @@ void chosen_inline_result_free(ChosenInlineResult *cir){
 
     if(cir->from){
         user_free(cir->from);
-        ffree(cir->from);
     }
 
     if(cir->location) {
         location_free(cir->location);
-        ffree(cir->location);
     }
 
     if(cir->inline_message_id){
@@ -978,8 +1041,12 @@ void successful_payment_free(SuccessfulPayment *spayment){
 void file_free(File *ofile){
     if(ofile == NULL)
         return ;
+
     if(ofile->file_id)
         ffree(ofile->file_id);
+
+    if(ofile->file_unique_id)
+        ffree(ofile->file_unique_id);
 
     if(ofile->file_path)
         ffree(ofile->file_path);
@@ -1030,180 +1097,21 @@ void chat_photo_free(ChatPhoto *ochat_photo){
     if(ochat_photo->small_file_id)
         ffree(ochat_photo->small_file_id);
 
+    if(ochat_photo->small_file_unique_id)
+        ffree(ochat_photo->small_file_unique_id);
+
     if(ochat_photo->big_file_id)
         ffree(ochat_photo->big_file_id);
 
+
+    if(ochat_photo->big_file_unique_id)
+        ffree(ochat_photo->big_file_unique_id);
+
+
     ffree(ochat_photo);
-    ochat_photo = NULL;
-}
-
-void framebot_add( Framebot *framebot, Update *update ){
-
-    if( update->message ) {
-        if(!framebot->up_message)
-            framebot->up_message = update;
-        else
-            update_add(framebot->up_message, update);
-    }
-
-
-    else if( update->edited_message ) {
-        if(!framebot->up_edited_message)
-            framebot->up_edited_message = update;
-        else
-            update_add(framebot->up_edited_message, update);
-    }
-
-
-    else if( update->channel_post ) {
-        if(!framebot->up_channel_post)
-            framebot->up_channel_post = update;
-        else
-            update_add(framebot->up_channel_post, update);
-    }
-
-
-    else if( update->edited_channel_post ) {
-        if(!framebot->up_edited_channel_post)
-            framebot->up_edited_channel_post = update;
-        else
-            update_add(framebot->up_edited_channel_post, update);
-    }
-
-
-    else if( update->inline_query ) {
-        if(!framebot->up_inline_query)
-            framebot->up_inline_query = update;
-        else
-            update_add(framebot->up_inline_query, update);
-    }
-
-
-    else if( update->chosen_inline_result ) {
-        if(!framebot->up_chosen_inline_result)
-            framebot->up_chosen_inline_result = update;
-        else
-            update_add(framebot->up_chosen_inline_result, update);
-    }
-
-
-    else if( update->callback_query ) {
-        if(!framebot->up_callback_query)
-            framebot->up_callback_query = update;
-        else
-            update_add(framebot->up_callback_query, update);
-    }
-
-
-    else if( update->shipping_query ) {
-        if(!framebot->up_shipping_query)
-            framebot->up_shipping_query = update;
-        else
-            update_add(framebot->up_shipping_query, update);
-    }
-
-
-    else if( update->pre_checkout_query ) {
-        if(!framebot->up_pre_checkout_query)
-            framebot->up_pre_checkout_query = update;
-        else
-            update_add(framebot->up_pre_checkout_query, update);
-    }
-
-    framebot->update_id = update->update_id;
-
 }
 
 
-void framebot_free(Framebot *framebot) {
-    if(framebot == NULL)
-        return ;
-
-    if(framebot->up_message) {
-        Update *u, *previous = framebot->up_message;
-
-        while(previous){
-            u = previous->next;
-            update_free(previous);
-            previous = u;
-        }
-    }
-    else if(framebot->up_edited_message) {
-        Update *u, *previous = framebot->up_edited_message;
-
-        while(previous){
-            u = previous->next;
-            update_free(previous);
-            previous = u;
-        }
-    }
-    else if(framebot->up_channel_post) {
-        Update *u, *previous = framebot->up_channel_post;
-
-        while(previous){
-            u = previous->next;
-            update_free(previous);
-            previous = u;
-        }
-    }
-    else if(framebot->up_edited_channel_post) {
-        Update *u, *previous = framebot->up_edited_channel_post;
-
-        while(previous){
-            u = previous->next;
-            update_free(previous);
-            previous = u;
-        }
-    }
-    else if(framebot->up_inline_query) {
-        Update *u, *previous = framebot->up_inline_query;
-
-        while(previous){
-            u = previous->next;
-            update_free(previous);
-            previous = u;
-        }
-    }
-    else if(framebot->up_chosen_inline_result) {
-        Update *u, *previous = framebot->up_chosen_inline_result;
-
-        while(previous){
-            update_free(previous);
-            u = previous->next;
-            update_free(previous);
-            previous = u;
-        }
-    }
-    else if(framebot->up_callback_query) {
-        Update *u, *previous = framebot->up_callback_query;
-
-        while(previous){
-            u = previous->next;
-            update_free(previous);
-            previous = u;
-        }
-    }
-    else if(framebot->up_shipping_query) {
-        Update *u, *previous = framebot->up_shipping_query;
-
-        while(previous){
-            u = previous->next;
-            update_free(previous);
-            previous = u;
-        }
-    }
-    else if(framebot->up_pre_checkout_query) {
-        Update *u, *previous = framebot->up_pre_checkout_query;
-
-        while(previous){
-            u = previous->next;
-            update_free(previous);
-            previous = u;
-        }
-    }
-
-    ffree(framebot);
-}
 
 
 void poll_free(Poll *poll){
@@ -1336,4 +1244,53 @@ void mask_position_free(MaskPosition *mask_position){
 
     ffree(mask_position);
 }
+
+void get_type_update(Update *update, Update *n_update){
+    Update *p = update;
+
+    while(p->next){
+        p = p->next;
+    }
+
+    p->next = n_update;
+}
+
+
+
+void chat_permissions_free(ChatPermissions *chat_permissions){
+
+    free(chat_permissions);
+
+}
+
+
+void sticker_set_free(StickerSet *sticker_set){
+    if(sticker_set->name)
+        free(sticker_set->name);
+
+    if(sticker_set->title)
+        free(sticker_set->title);
+
+    Sticker *snext = NULL;
+    while(sticker_set->stickers){
+        snext = sticker_set->stickers->next;
+        sticker_free(sticker_set->stickers);
+        sticker_set->stickers = snext;
+    }
+
+    if(sticker_set->thumb)
+        photo_size_free(sticker_set->thumb);
+
+    ffree(sticker_set);
+}
+
+
+void callback_game_free(CallbackGame *callbackgame){
+
+    if(callbackgame->inline_message_id)
+    ffree(callbackgame->inline_message_id);
+
+    ffree(callbackgame);
+}
+
 

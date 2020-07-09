@@ -33,8 +33,19 @@ int main(int argc, char *argv[]){
     	exit(-1);
     }
 
-	UserProfilePhotos * oupp = get_user_profile_photos(_bot, argv[3], 0, 0);
+    Update * root_update = NULL, *update = NULL;
 
+    root_update = get_updates(_bot, 0, 0, 0, "message");
+	update = root_update;
+	UserProfilePhotos * oupp = NULL;
+
+	while(update){
+		if(update->message){
+			oupp = get_user_profile_photos(_bot, update->message->from->id, 0, 0);
+			break;
+		}
+		update = update->next;
+	}
 	if(oupp){
 		printf("true");
 		upp(oupp);
@@ -44,6 +55,8 @@ int main(int argc, char *argv[]){
 		if(error)
 			printf("error_code=%d error_descriptio=n%s\n", error->error_code, error->description);
 	}
+
+	list_update_free(root_update);
 
 	return 0;
 }

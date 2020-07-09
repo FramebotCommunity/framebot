@@ -111,7 +111,7 @@
 ?file_id=%s"
 
 #define API_getUserProfilePhotos "getUserProfilePhotos\
-?user_id=%s\
+?user_id=%ld\
 &offset=%ld\
 &limit=%ld"
 
@@ -293,7 +293,7 @@
 
 /* analyze parameter API methods */
 #define CONVERT_BOOLEAN_STR(p) (p > 0 ? "true" : "false")
-#define CONVERT_URL_STRING(p) (p == NULL ? "" : p)
+#define CONVERT_NULL_STRING(p) (p == NULL ? "" : p)
 #define LIMIT_UPDATE(p) (p < 1 ? 100 : p)
 #define IFILE_LONG(p) (p > 0 ? api_ltoa(p) : NULL)
 #define IFILE_INT(p) (p > 0 ? api_itoa(p) : NULL)
@@ -342,9 +342,21 @@ typedef int32_t bool;
 #define ON  1
 #define OFF 0
 
-#define MARKDOWN "HTML"
-#define HTML     "MARKDOWN"
+#define MARKDOWN "MARKDOWN"
+#define HTML     "HTML"
 #define RAW      NULL
+
+#define MESSAGE 1
+#define EDITED_MESSAGE 2
+#define CHANNEL_POST 3
+#define EDITED_CHANNEL_POST 4
+#define INLINE_QUERY 5
+#define CHOSEN_INLINE_RESULT 6
+#define CALLBACK_QUERY 7
+#define SHIPPING_QUERY 8
+#define PRE_CHECKOUT_QUERY 9
+#define POLL 10
+#define POLL_ANSWER 11
 
 #include <curl/curl.h>
 #include <jansson.h>
@@ -364,7 +376,7 @@ Error * show_error();
 
 /** Available methods **/
 User * get_me(Bot *bot);
-Framebot *get_updates (Bot *bot, Framebot *framebot, int64_t offset, int32_t limit,
+Update *get_updates (Bot *bot, int64_t offset, int32_t limit,
             int64_t timeout, char *allowed_updates);
 
 /* sendMessage */
@@ -394,12 +406,14 @@ Message * send_photo_chat(Bot * bot, int64_t chat_id, char * filename, char * ca
         char * parse_mode, bool disable_notification, int64_t reply_to_message_id, char * reply_markup);
 
 /* sendaudio */
-Message * send_audio(Bot *bot, char * chat_id, char * filename, char * caption,
-        char * parse_mode, int32_t duration, char * performer, char * title,
-        char * thumb, bool disable_notification, int64_t reply_to_message_id, char * reply_markup);
-Message * send_audio_chat(Bot * bot, int64_t chat_id, char * filename, char * caption, 
-        char * parse_mode, int32_t duration, char * performer, char * title,
-        char * thumb, bool disable_notification, int64_t reply_to_message_id, char * reply_markup);
+Message * send_audio(Bot *bot, char * chat_id, char * filename,  char * caption,
+            char * parse_mode, int32_t duration, char * performer,
+            char * title, char * thumb, bool disable_notification, int64_t reply_to_message_id,
+            char * reply_markup);
+Message * send_audio_chat(Bot * bot, int64_t chat_id, char * filename, char * caption,
+            char * parse_mode, int32_t duration, char * performer,
+            char * title,  char * thumb, bool disable_notification, int64_t reply_to_message_id,
+            char * reply_markup);
 
 /* senddocument */
 Message * send_document(Bot * bot, char * chat_id, char * filename, char * thumb, char * caption,
@@ -423,10 +437,10 @@ Message * send_voice_chat(Bot *bot, int64_t chat_id, char * filename, char * cap
 
 /* sendvideonote */
 Message * send_video_note(Bot * bot, char * chat_id, char * filename, int32_t duration,
-        int32_t length, bool disable_notification, int64_t reply_to_message_id,  char * reply_markup);
+        int32_t length, char *thumb, bool disable_notification, int64_t reply_to_message_id,  char * reply_markup);
 
 Message * send_video_note_chat(Bot * bot, int64_t chat_id, char * filename, int32_t duration,
-        int32_t length, bool disable_notification, int64_t reply_to_message_id, char * reply_markup);
+        int32_t length, char *thumb, bool disable_notification, int64_t reply_to_message_id, char * reply_markup);
 
 // sendMediaGroup
 
@@ -478,10 +492,9 @@ int send_chat_action(Bot * bot, char * chat_id, char * action);
 int send_chat_action_chat(Bot * bot, int64_t chat_id, char * action);
 
 /* getUserProfilePhotos */
-UserProfilePhotos * get_user_profile_photos(Bot * bot, char *user_id,
+UserProfilePhotos * get_user_profile_photos(Bot * bot, int64_t user_id,
     int64_t offset, int64_t limit);
-UserProfilePhotos * get_user_profile_photos_chat(Bot * bot, int64_t user_id,
-    int64_t offset, int64_t limit);
+
 
 /* getFile */
 File * get_file(Bot * bot, const char * file_id);
@@ -612,5 +625,6 @@ bool answer_callback_query(Bot * bot, char *callback_query_id, char *text, bool 
 BotCommand *getMyCommands(Bot *bot);
 bool set_my_commands(Bot *bot, BotCommand *bot_command);
 
+Update *get_type_updates(int type, Update **update);
 
 #endif

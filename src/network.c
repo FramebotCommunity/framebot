@@ -287,8 +287,6 @@ MemStore * call_method_upload(const char * token, IFile ifile){
                     curl_mime_name(field, "thumb");
                     if(api_tg_exist(ifile.audio.thumb))
                         curl_mime_filedata(field, ifile.audio.thumb);
-                    else
-                        curl_mime_data(field, ifile.audio.thumb, CURL_ZERO_TERMINATED);
                 }
 
 
@@ -424,11 +422,9 @@ MemStore * call_method_upload(const char * token, IFile ifile){
                 /* upload file */
                 if(ifile.document.thumb != NULL){
                     field = curl_mime_addpart(form);
-                    curl_mime_name(field, "document");
+                    curl_mime_name(field, "thumb");
                     if(api_tg_exist(ifile.document.thumb))
                         curl_mime_filedata(field, ifile.document.thumb);
-                    else
-                        curl_mime_data(field, ifile.document.thumb, CURL_ZERO_TERMINATED);
                 }
 
 
@@ -661,8 +657,6 @@ MemStore * call_method_upload(const char * token, IFile ifile){
                     curl_mime_name(field, "thumb");
                     if(api_tg_exist(ifile.videonote.thumb))
                         curl_mime_filedata(field, ifile.videonote.thumb);
-                    else
-                        curl_mime_data(field, ifile.videonote.thumb, CURL_ZERO_TERMINATED);
                 }
 
 

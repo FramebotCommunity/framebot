@@ -928,7 +928,7 @@ Message * message_parse(json_t *json){
         json_t *from, *chat, *forward_from, *forward_from_chat, *reply_to_message, 
         *audio, *document, *animation, *game, *sticker, *video, *voice, *video_note, *contact,
         *location, *venue, *poll, *dice, *left_chat_member, *pinned_message,
-        *invoice, *successful_payment, *passport_data, *reply_markup;
+        *invoice, *successful_payment, /**passport_data,*/ *reply_markup;
 
         from = json_object_get( pmessage, "from" );
         message->from = user_parse(from);
@@ -996,8 +996,8 @@ Message * message_parse(json_t *json){
         successful_payment = json_object_get( pmessage, "successful_payment" );
         message->successful_payment = successful_payment_parse(successful_payment);
 
-        passport_data = json_object_get( pmessage, "passport_data" );
-        message->passport_data = passport_data_parse(passport_data);
+ //       passport_data = json_object_get( pmessage, "passport_data" );
+//        message->passport_data = passport_data_parse(passport_data);
 
         reply_markup = json_object_get( pmessage, "reply_markup" );
         message->reply_markup = inline_keyboard_markup_parse(reply_markup);

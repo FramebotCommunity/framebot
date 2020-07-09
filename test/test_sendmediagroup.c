@@ -87,17 +87,20 @@ int main(int argc, char *argv[]){
 	username = argv[2];
 
 
-	Framebot *update = NULL;
+	Update *update = NULL, *root_update = NULL;
 
-	update = get_updates(_bot, update, 0, 0, 0, "message");
+	root_update = get_updates(_bot, 0, 0, 0, "message");
+	update = root_update;
 
-	while(update->up_message){
-		if(strcmp(update->up_message->message->from->username, argv[2]) == 0){
+	while(update){
+		if(update->message && strcmp(update->message->from->username, argv[2]) == 0){
 			valid_username = 1;
-			chat_id = update->up_message->message->from->id;
+			chat_id = update->message->from->id;
 			_media_group();
 			break;
 		}
+
+		update = update->next;
 	}
 
 	if(valid_username == 0)

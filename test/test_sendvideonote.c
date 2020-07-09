@@ -1,4 +1,3 @@
- 
 #include <framebot/framebot.h>
 
 #define BOLD         "\033[1m"
@@ -21,26 +20,55 @@
 #define WHITE "\033[01;37m"
 
 
+#ifdef _WIN32
+    #include <Windows.h>
+    #define custom_sleep(mili) Sleep(mili)
+#else
+    #include <unistd.h>
+    #define custom_sleep(mili) sleep(mili)
+#endif
+
+
 Bot * _bot = NULL;
 char *username = NULL;
 int64_t chat_id = 0;
 int valid_username = 0;
 char *filename = NULL;
+char filename_id[100];
+char *thumb = NULL;
+char *user_group = NULL;
 Message *result = NULL;
+Message *result1 = NULL;
+Message *first = NULL;
+
+/*
+send_video_note(
+Bot * bot
+char * chat_id
+char * filename
+int32_t duration
+int32_t length
+char *thumb
+bool disable_notification
+int64_t reply_to_message_id
+char * reply_markup)
+*/
 
 int _videonote(){
 
 	printf(WHITE "Send videonote ... \n");
 
-	/* Bot * bot, char * chat_id, char * filename, int64_t duration,
-    int64_t length, bool disable_notification, int64_t reply_to_message_id,
-    char * reply_markup */
-
 	printf(WHITE "Send chat_id ........." COLOR_RESET);
 	fflush(stdout);
-	result = send_video_note_chat(_bot, chat_id, filename, 0, 0, ON, 0, NULL);
-	if(result){
+	first = send_video_note_chat(_bot, chat_id, filename, 0/*duration*/, 0/*length*/,
+				NULL/*thumb*/, OFF/*disable_notification*/, 0/*reply_to_message_id*/, NULL/*reply_markup*/);
+	if(first){
 		printf(BLUE "OK\n" COLOR_RESET);
+		if(first->video_note)
+			strcpy(filename_id, first->video_note->file_id);
+		else if(first->video)
+			strcpy(filename_id, first->video->file_id);
+		message_free(first);
 	}
 	else{
 		Error *error = get_error();
@@ -50,9 +78,11 @@ int _videonote(){
 
 	printf(WHITE "Send username ........." COLOR_RESET);
 	fflush(stdout);
-	result = send_video_note_chat(_bot, chat_id, filename, 0, 0, ON, 0, NULL);
+	result = send_video_note(_bot, user_group, filename, 0/*duration*/, 0/*length*/,
+				NULL/*thumb*/, OFF/*disable_notification*/, 0/*reply_to_message_id*/, NULL/*reply_markup*/);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
+		message_free(result);
 	}
 	else{
 		Error *error = get_error();
@@ -62,9 +92,11 @@ int _videonote(){
 
 	printf(WHITE "Send duration ........." COLOR_RESET);
 	fflush(stdout);
-	result = send_video_note_chat(_bot, chat_id, filename, 10, 0, ON, 0, NULL);
+	result = send_video_note_chat(_bot, chat_id, filename, 30/*duration*/, 0/*length*/,
+				NULL/*thumb*/, OFF/*disable_notification*/, 0/*reply_to_message_id*/, NULL/*reply_markup*/);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
+		message_free(result);
 	}
 	else{
 		Error *error = get_error();
@@ -74,9 +106,11 @@ int _videonote(){
 
 	printf(WHITE "Send length ........." COLOR_RESET);
 	fflush(stdout);
-	result = send_video_note_chat(_bot, chat_id, filename, 10, 10, ON, 0, NULL);
+	result = send_video_note_chat(_bot, chat_id, filename, 0/*duration*/, 420/*length*/,
+				NULL/*thumb*/, OFF/*disable_notification*/, 0/*reply_to_message_id*/, NULL/*reply_markup*/);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
+		message_free(result);
 	}
 	else{
 		Error *error = get_error();
@@ -84,9 +118,34 @@ int _videonote(){
 		exit(-1);
 	}
 
+
+	printf(WHITE "Send thumb ...." COLOR_RESET);
+	fflush(stdout);
+	result = send_video_note_chat(_bot, chat_id, filename, 0/*duration*/, 320/*length*/,
+				thumb/*thumb*/, OFF/*disable_notification*/, 0/*reply_to_message_id*/, NULL/*reply_markup*/);
+	if(result){
+		if(result->video && result->video->thumb)
+			printf("..video thumb yes..");
+
+		else if(result->video_note && result->video_note->thumb)
+			printf("..video_note thumb yes..");
+
+				printf(BLUE "OK\n" COLOR_RESET);
+
+		message_free(result);
+	}
+	else{
+		Error *error = get_error();
+		printf(RED"false\ncode:%d | description:%s\n"COLOR_RESET, error->error_code, error->description);
+		exit(-1);
+	}
+
+
+
 	printf(WHITE "Send disable_notification ........." COLOR_RESET);
 	fflush(stdout);
-	result = send_video_note_chat(_bot, chat_id, filename, 10, 10, ON, 0, NULL);
+	result = send_video_note_chat(_bot, chat_id, filename, 0/*duration*/, 0/*length*/,
+				NULL/*thumb*/, ON/*disable_notification*/, 0/*reply_to_message_id*/, NULL/*reply_markup*/);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 	}
@@ -98,10 +157,12 @@ int _videonote(){
 
 	printf(WHITE "Send reply_to_message_id ........." COLOR_RESET);
 	fflush(stdout);
-	Message *forward = send_video_note_chat(_bot, chat_id, filename, 10, 10, ON, result->message_id, NULL);
+	Message *forward = send_video_note_chat(_bot, chat_id, filename, 0/*duration*/, 0/*length*/,
+				NULL/*thumb*/, OFF/*disable_notification*/, result->message_id/*reply_to_message_id*/, NULL/*reply_markup*/);
 	if(result){
 		printf(BLUE "OK\n" COLOR_RESET);
 		message_free(forward);
+		message_free(result);
 	}
 	else{
 		Error *error = get_error();
@@ -115,7 +176,7 @@ int _videonote(){
 int main(int argc, char *argv[]){
 
 	if(argc < 4){
-		fprintf(stderr, "sendvideonote <token> <username> <path audio>");
+		fprintf(stderr, "sendvideonote <token> <username> @<user_group> <path video> <path thumb>");
 		exit(-1);
 	}
 
@@ -125,21 +186,28 @@ int main(int argc, char *argv[]){
 		exit(-1);
 	}
 
-	filename = argv[3];
-	username = argv[2];
+	username   = argv[2];
+	user_group = argv[3];
+	filename   = argv[4];
+	thumb      = argv[5];
 
-	Framebot *update = NULL;
+	Update *update = NULL, *root_update = NULL;
 
-	update = get_updates(_bot, update, 0, 0, 0, "message");
+	root_update = get_updates(_bot, 0, 0, 0, "message");
+	update = root_update;
 
-	while(update->up_message){
-		if(strcmp(update->up_message->message->from->username, argv[2]) == 0){
+	while(update){
+		if(update->message && strcmp(update->message->from->username, argv[2]) == 0){
 			valid_username = 1;
-			chat_id = update->up_message->message->from->id;
+			chat_id = update->message->from->id;
 			_videonote();
 			break;
 		}
+
+		update = update->next;
 	}
+
+	list_update_free(root_update);
 
 	if(valid_username == 0)
 		printf("Username not found");

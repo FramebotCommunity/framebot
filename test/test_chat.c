@@ -76,7 +76,7 @@ int _func(){
 
 	printf("user_profile_photos .......... ");
 	UserProfilePhotos * b =
-			get_user_profile_photos_chat(_bot, user_id, 1, 0);
+			get_user_profile_photos(_bot, user_id, 1, 0);
 	if(b){
 		printf("ok\n");
 		user_profile_photos_free(b);
@@ -206,23 +206,24 @@ int main(int argc, char *argv[]){
 	text = argv[3];
 	username = argv[2];
 
-	Framebot *update = NULL;
+	Update *update = NULL, *root_update = NULL;
 
-	update = get_updates(_bot, update, 0, 0, 0, "message");
+	root_update = get_updates(_bot, 0, 0, 0, "message");
+	update = root_update;
 
-	while(update->up_message){
-		if(strcmp(update->up_message->message->from->username, argv[2]) == 0){
+	while(update){
+		if(update->message && strcmp(update->message->from->username, argv[2]) == 0){
 			valid_username = 1;
-			chat_id = update->up_message->message->chat->id;
-			user_id = update->up_message->message->from->id;
+			chat_id = update->message->chat->id;
+			user_id = update->message->from->id;
 			_func();
 			break;
 		}
-		update->up_message = update->up_message->next;
+		update = update->next;
 	}
 
 	bot_free(_bot);
-	framebot_free(update);
+	update_free(root_update);
 
 	if(valid_username == 0)
 		printf("Username not found");
